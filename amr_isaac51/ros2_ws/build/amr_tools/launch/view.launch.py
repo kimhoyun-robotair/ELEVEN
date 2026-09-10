@@ -1,0 +1,1 @@
+/home/hoyunkim/amr_isaac51/ros2_ws/src/amr_tools/launch/view.launch.py

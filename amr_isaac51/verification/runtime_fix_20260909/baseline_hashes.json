@@ -1,0 +1,22 @@
+{
+  "sim/run_sim.py": "8692e5799bd70d639a922c1bae47bb94b73e5b68eb134a8ea6db77384f4d26a6",
+  "sim/control.py": "1e57516b4b0b4ed4529f957c9d93d3164a45212113221c259a45a5a2648a0641",
+  "model/build_assets.py": "3bb8c28132466b7b83175abfea8565cb76b4b213d702b3624de578214732b8bf",
+  "model/render_preview.py": "950f6af55368d910563ad1e98f430180edece58ee75bd4c89ac2893b615d88ba",
+  "model/__init__.py": "a35e01147a40727c2de89fdf0532f1a50d6c3f94021cbe6ee0a060c66d06ee9f",
+  "config/robot.json": "19749ac3645baf233e24f1aaa8d8b08c25c2dd7beb4b62418f13ceebc7ae0c6a",
+  "assets/robot.usda": "d5d3c4bad732f0e3e2730c8648a2e3d3d32edbe85efdd192bf02288623a169b4",
+  "assets/test_world.usd": "742e75890c693886f4e07181278256d094fdb2cb66ad6a4037e06bc795354f50",
+  "assets/test_world_payload250.usd": "704d2502226fad926c90f63b97e4ca7b5e5a39ab58bdb400f87a1e07ca6e312a",
+  "assets/robot.usd": "d5d3c4bad732f0e3e2730c8648a2e3d3d32edbe85efdd192bf02288623a169b4",
+  "scripts/install_ros_deps.sh": "01fec33b150de820dcf236fa8b3484a7415c80c1ea5ddb6079e2d860744c0bda",
+  "scripts/build_assets.sh": "0e2c8007ee9f713f7d29ab56ca37a0fba876ba3c28f528bdf25c25ca0a19dcca",
+  "scripts/run_ros_tools.sh": "62324e69f1a9feb3d157a7c5a30e5a8b474c68131036c538725c004212c5eb42",
+  "scripts/run_sim.sh": "aca9503697bf13ea8de5d094f97b9bf2878f57701eb2e8192ad4d98fa9fed196",
+  "tests/validate_usd.py": "3a4ac61073b2fea3217146e9b47b523fb81be79174dba8e8dc1bc45092b52506",
+  "tests/test_control.py": "d40f3c66766ca6be670e2bd124d3bd50f0949b25f519e985daf2198911672cb9",
+  "docs/ROS_TOPICS.md": "536d371462356dceb5b82759e95519b4d4ad8b620929b382331c3ad11fb4e3ab",
+  "docs/model_preview.png": "787a90e5a5f6efff936dab6673ac3377646e8f3fd75d80a5ef9c4843ee8e0ab1",
+  "docs/SOURCES_AND_ASSUMPTIONS.md": "c910d9587370e35ce92b9ad657c0e115572ca70d9358de3f72ce6f3309152f99",
+  "README_KO.md": "076d5e6940713fc5934fbfcdfa00d16c28af8ffb925747fac386efdeaf0b1153"
+}

@@ -1,0 +1,315 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "failures": [],
+  "motion": {
+    "requested": true,
+    "forward_m": 0.3048975365361457,
+    "lateral_m": -1.549164800351832e-05,
+    "yaw_change_rad": 0.0,
+    "stopped_vx_mps": 1.7881392500029896e-06,
+    "stopped_wz_radps": 0.0,
+    "maneuvers": {
+      "reverse": {
+        "forward_m": -0.26657820865511894,
+        "distance_m": 0.26659208257000966,
+        "yaw_change_rad": -0.018873261520695354,
+        "stopped_vx_mps": 2.7428958421978813e-06,
+        "stopped_wz_radps": 4.031628986888437e-11
+      },
+      "left": {
+        "forward_m": 0.02157954211682825,
+        "distance_m": 0.021650384368662796,
+        "yaw_change_rad": 0.4767272914916829,
+        "stopped_vx_mps": 3.6837922716288807e-06,
+        "stopped_wz_radps": 3.151839077551524e-05
+      },
+      "right": {
+        "forward_m": 0.007856818080652405,
+        "distance_m": 0.008410097498073638,
+        "yaw_change_rad": -0.4253545292552786,
+        "stopped_vx_mps": 4.490684144633075e-06,
+        "stopped_wz_radps": 4.961447660412087e-12
+      }
+    }
+  },
+  "topics": {
+    "/clock": {
+      "count": 2443,
+      "wall_hz": 120.0,
+      "age_wall_s": 0.0,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "sim_seconds": 20.675
+      }
+    },
+    "/odom": {
+      "count": 1221,
+      "wall_hz": 60.0,
+      "age_wall_s": 0.01,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "odom",
+        "child_frame": "base_footprint",
+        "xy": [
+          0.068,
+          0.005
+        ],
+        "vx": 0.0,
+        "wz": -0.0
+      }
+    },
+    "/joint_states": {
+      "count": 1221,
+      "wall_hz": 60.0,
+      "age_wall_s": 0.01,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "",
+        "joint_names": [
+          "left_drive_joint",
+          "right_drive_joint",
+          "caster_fl_swivel_joint",
+          "caster_fr_swivel_joint",
+          "caster_rl_swivel_joint",
+          "caster_rr_swivel_joint",
+          "caster_fl_roll_joint",
+          "caster_fr_roll_joint",
+          "caster_rl_roll_joint",
+          "caster_rr_roll_joint"
+        ]
+      }
+    },
+    "/tf": {
+      "count": 1221,
+      "wall_hz": 60.01,
+      "age_wall_s": 0.01,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "transforms": 12
+      }
+    },
+    "/tf_static": {
+      "count": 1,
+      "wall_hz": 0.0,
+      "age_wall_s": 20.3,
+      "stamp_advanced": false,
+      "errors": [],
+      "details": {
+        "transforms": 6
+      }
+    },
+    "/front_camera/color/image_raw": {
+      "count": 236,
+      "wall_hz": 12.17,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_camera_optical_frame",
+        "width": 640,
+        "height": 360,
+        "encoding": "rgb8"
+      }
+    },
+    "/front_camera/color/camera_info": {
+      "count": 305,
+      "wall_hz": 14.98,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_camera_optical_frame",
+        "width": 640,
+        "height": 360
+      }
+    },
+    "/front_camera/depth/image_raw": {
+      "count": 303,
+      "wall_hz": 14.88,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_camera_optical_frame",
+        "width": 640,
+        "height": 360,
+        "encoding": "32FC1",
+        "finite_depth_samples": 40,
+        "sample_depth_m": [
+          0.515,
+          5.626
+        ]
+      }
+    },
+    "/front_camera/depth/camera_info": {
+      "count": 305,
+      "wall_hz": 14.98,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_camera_optical_frame",
+        "width": 640,
+        "height": 360
+      }
+    },
+    "/rear_camera/color/image_raw": {
+      "count": 304,
+      "wall_hz": 14.98,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_camera_optical_frame",
+        "width": 640,
+        "height": 360,
+        "encoding": "rgb8"
+      }
+    },
+    "/rear_camera/color/camera_info": {
+      "count": 305,
+      "wall_hz": 14.98,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_camera_optical_frame",
+        "width": 640,
+        "height": 360
+      }
+    },
+    "/rear_camera/depth/image_raw": {
+      "count": 304,
+      "wall_hz": 14.98,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_camera_optical_frame",
+        "width": 640,
+        "height": 360,
+        "encoding": "32FC1",
+        "finite_depth_samples": 40,
+        "sample_depth_m": [
+          0.516,
+          5.729
+        ]
+      }
+    },
+    "/rear_camera/depth/camera_info": {
+      "count": 305,
+      "wall_hz": 14.98,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_camera_optical_frame",
+        "width": 640,
+        "height": 360
+      }
+    },
+    "/front_right_lidar/scan": {
+      "count": 203,
+      "wall_hz": 10.0,
+      "age_wall_s": 0.05,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_right_lidar_link",
+        "beams": 541,
+        "finite_returns": 541
+      }
+    },
+    "/rear_left_lidar/scan": {
+      "count": 203,
+      "wall_hz": 10.0,
+      "age_wall_s": 0.05,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_left_lidar_link",
+        "beams": 541,
+        "finite_returns": 541
+      }
+    }
+  },
+  "tf_edges": [
+    [
+      "base_footprint",
+      "base_link"
+    ],
+    [
+      "base_link",
+      "caster_fl_swivel"
+    ],
+    [
+      "base_link",
+      "caster_fr_swivel"
+    ],
+    [
+      "base_link",
+      "caster_rl_swivel"
+    ],
+    [
+      "base_link",
+      "caster_rr_swivel"
+    ],
+    [
+      "base_link",
+      "front_camera_link"
+    ],
+    [
+      "base_link",
+      "front_right_lidar_link"
+    ],
+    [
+      "base_link",
+      "left_drive"
+    ],
+    [
+      "base_link",
+      "rear_camera_link"
+    ],
+    [
+      "base_link",
+      "rear_left_lidar_link"
+    ],
+    [
+      "base_link",
+      "right_drive"
+    ],
+    [
+      "caster_fl_swivel",
+      "caster_fl_wheel"
+    ],
+    [
+      "caster_fr_swivel",
+      "caster_fr_wheel"
+    ],
+    [
+      "caster_rl_swivel",
+      "caster_rl_wheel"
+    ],
+    [
+      "caster_rr_swivel",
+      "caster_rr_wheel"
+    ],
+    [
+      "front_camera_link",
+      "front_camera_optical_frame"
+    ],
+    [
+      "odom",
+      "base_footprint"
+    ],
+    [
+      "rear_camera_link",
+      "rear_camera_optical_frame"
+    ]
+  ]
+}

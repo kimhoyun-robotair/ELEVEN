@@ -1,0 +1,44 @@
+{
+  "runtime_startup_passed": false,
+  "startup_checks_passed": false,
+  "phase": "failed",
+  "target": "Isaac Sim 5.1.0 / Ubuntu 24.04 / ROS 2 Jazzy",
+  "test_scope": "live startup and stream checks; motion verified by separate ROS smoke test",
+  "camera_frames": {
+    "front": 0,
+    "rear": 0
+  },
+  "camera_valid_depth_frames": {
+    "front": 0,
+    "rear": 0
+  },
+  "physics_samples": [],
+  "scan_frames": {
+    "front_right": 0,
+    "rear_left": 0
+  },
+  "scan_finite_frames": {
+    "front_right": 0,
+    "rear_left": 0
+  },
+  "python_version": "3.11.13",
+  "ros_distro": "jazzy",
+  "payload_kg": 0.0,
+  "initial_caster_yaw_deg": null,
+  "joint_names": [
+    "left_drive_joint",
+    "right_drive_joint",
+    "caster_fl_swivel_joint",
+    "caster_fr_swivel_joint",
+    "caster_rl_swivel_joint",
+    "caster_rr_swivel_joint",
+    "caster_fl_roll_joint",
+    "caster_fr_roll_joint",
+    "caster_rl_roll_joint",
+    "caster_rr_roll_joint"
+  ],
+  "odom_source": "PhysX ground truth projected to base_footprint",
+  "lidar_source": "PhysX raycast_all, ideal instantaneous scan, robot self-filter",
+  "camera_source": "RTX RGBA and distance_to_image_plane annotators",
+  "error": "RuntimeError: Startup check failed: sensors_ready=False, physics_stable=False, camera_frames={'front': 0, 'rear': 0}"
+}

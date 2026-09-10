@@ -1,0 +1,136 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+  - Class: rviz_common/Time
+    Name: Time
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Background Color: 35; 38; 43
+    Fixed Frame: odom
+    Frame Rate: 30
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Ground grid
+      Enabled: true
+      Cell Size: 1
+      Plane Cell Count: 30
+      Color: 110; 110; 110
+    - Class: rviz_default_plugins/TF
+      Name: Robot and sensor frames
+      Enabled: true
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Marker Scale: 0.3
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+    - Class: rviz_default_plugins/Odometry
+      Name: Ground truth odometry
+      Enabled: true
+      Topic:
+        Value: /odom
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Keep: 100
+      Position Tolerance: 0.05
+      Angle Tolerance: 0.1
+      Shape: Arrow
+      Color: 80; 200; 240
+    - Class: rviz_default_plugins/LaserScan
+      Name: Front right lidar
+      Enabled: true
+      Topic:
+        Value: /front_right_lidar/scan
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Style: Points
+      Size (Pixels): 3
+      Color Transformer: FlatColor
+      Color: 50; 235; 150
+      Decay Time: 0.2
+    - Class: rviz_default_plugins/LaserScan
+      Name: Rear left lidar
+      Enabled: true
+      Topic:
+        Value: /rear_left_lidar/scan
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Style: Points
+      Size (Pixels): 3
+      Color Transformer: FlatColor
+      Color: 255; 180; 60
+      Decay Time: 0.2
+    - Class: rviz_default_plugins/Image
+      Name: Front RGB
+      Enabled: true
+      Topic:
+        Value: /front_camera/color/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Queue Size: 2
+      Normalize Range: true
+    - Class: rviz_default_plugins/Image
+      Name: Front depth
+      Enabled: true
+      Topic:
+        Value: /front_camera/depth/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Queue Size: 2
+      Normalize Range: true
+      Median window: 5
+    - Class: rviz_default_plugins/Image
+      Name: Rear RGB
+      Enabled: true
+      Topic:
+        Value: /rear_camera/color/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Queue Size: 2
+      Normalize Range: true
+    - Class: rviz_default_plugins/Image
+      Name: Rear depth
+      Enabled: true
+      Topic:
+        Value: /rear_camera/depth/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Queue Size: 2
+      Normalize Range: true
+      Median window: 5
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Distance: 6
+      Pitch: 0.85
+      Yaw: 0.65
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+Window Geometry:
+  Width: 1440
+  Height: 960

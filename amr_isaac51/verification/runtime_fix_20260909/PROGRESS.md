@@ -1,0 +1,12 @@
+Authorized: implement and run Isaac Sim using README commands. Preserve preexisting edits.
+
+Plan: baseline runtime; instrument actual physics and camera; fix proven faults; compare settings; update assets/tests/docs; validate GUI, empty/250kg, ROS streams and motion; retain evidence.
+
+ROS_DOMAIN_ID=73 for task-owned runs. Baseline saved before edits. No git repository.
+
+Baseline GUI run reproduced camera timeout, exit 0, no report. Camera rgb/ReferenceTime fixes yielded 599 frames per camera/40 seconds. Original physical settings reproduce caster_fr bottom -46.37 mm and tilt 7.07 degrees. Contact instrumentation uses repeated filter groups for six explicit rigid patterns. Next: velocity-only 8->1 comparison.
+
+Plane-vs-box test is decisive: baseline 7.07deg / caster_fr -46.37mm. Velocity1 alone and external-forces still transiently sink. Plane with original velocity8 stable 25s; plane velocity1 stable 30s empty and 35s payload250. New compound chassis/fork colliders generated via fixed scripts/build_assets.sh (new run_usd_tool.py bootstrap). USD103/103, unit17/17 passed. Empty GUI95s plus ROS smoke forward passed: 1424 frames/camera, ~0.3m forward, max penetration <0.0002mm, max tilt 0. Net/filtered force tensors read zero for plane; do NOT claim force measurements for plane. Removed contact instrumentation from production; kept pose-based penetration/tilt guards. Need revalidate after removal. Fast-shutdown False caused teardown segfault; True with report saved first and app.post_quit(code) fixed error exit1 and success0.
+Current running: payload GUI session22866 (~100s); smoke maneuvers session49582 passed; snapshots pending. Next: new runs empty and payload/caster yaw using final no-contact-instrumentation runtime; negative physics baseline should trigger guard; fresh camera failure; static/IsaacUSD validation, docs/report/hashes.
+
+Completed: final no-contact-instrumentation empty yaw90 (65s) and payload yaw270 GUI (85s), ROS 15-topic + forward/reverse/left/right/stop all passed. Actual original-box negative test caught caster_fr penetration and exited1; final startup negative exited1. Isaac-bundled USD checker103/103, unit17/17. Report/images/chart/source hashes retained. All task simulation/ROS processes exited. verification/VALIDATION.md baseline was not snapshotted; final content reviewed directly. Source smoke baseline reconstructed by reversing only this task's added maneuver code.

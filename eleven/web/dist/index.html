@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Multi-floor · Indoor Simulation Testbed</title>
+  <meta name="description" content="Explore furnished multi-floor office and residence worlds, ride working elevators and inspect their controls.">
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+<main>
+  <aside>
+    <header><span class="brandmark">M<span>F</span></span><div><h1>Multi-floor</h1><p>INDOOR SIMULATION TESTBED</p></div></header>
+    <div class="world-switch" aria-label="환경"><button data-world="office" aria-pressed="true">Office</button><button data-world="house" aria-pressed="false">Residence</button></div>
+    <section class="world-info"><span class="eyebrow" id="world-tag">01 / WORKPLACE</span><h2 id="world-title">Atrium Office</h2><p id="world-description">4개 층 · 사무실 · 회의실 · 공용 공간</p></section>
+    <section><label for="floor">살펴볼 층</label><select id="floor"></select><div class="view-controls"><button id="lobby" class="selected">로비</button><button id="overview">전체 보기</button><button id="walk">자유 이동</button></div><label class="check"><input type="checkbox" id="cutaway"> 천장·상층 숨기기</label></section>
+    <section class="lift-section"><div class="section-heading"><label for="elevator">엘리베이터</label><span id="lift-type" class="chip">불투명</span></div><select id="elevator"></select><div class="lift-display"><span id="lift-floor">01</span><div><strong id="lift-state">대기</strong><span id="lift-velocity">0.00 m/s</span></div><span id="lift-direction">—</span></div><div class="floor-buttons" id="floor-buttons" aria-label="엘리베이터 목적 층"></div><div class="door-buttons"><button id="open" title="문 열기">◀│▶ <span>열기</span></button><button id="close" title="문 닫기">▶│◀ <span>닫기</span></button><button id="alarm" title="경보">♧ <span>경보</span></button></div><div class="hall-buttons"><button id="hall-up">↑ 이 층 호출</button><button id="hall-down">↓ 이 층 호출</button></div><button id="ride" class="primary">탑승하여 내부 보기 <span>↗</span></button><label class="check"><input type="checkbox" id="obstruction"> 출입구 장애물 시뮬레이션</label><p class="hint">누른 버튼만 점등됩니다. 도착 후 문이 열리면 요청 표시가 꺼집니다.</p></section>
+    <footer><a href="https://github.com/kimhoyun-robotair/testbed_for_sim" target="_blank" rel="noreferrer">소스 · Blender · Isaac Sim ↗</a><span>실시간 PBR / 미터 단위</span></footer>
+  </aside>
+  <div id="viewport" tabindex="0" aria-label="3D 환경. 마우스로 둘러보고 실제 3D 버튼을 클릭할 수 있습니다.">
+    <div class="topbar"><span id="view-label">OFFICE / FLOOR 01</span><span class="mode" id="mode-label">LOBBY</span></div>
+    <div id="loading" role="status"><span class="spinner"></span><strong>환경을 불러오는 중</strong><span id="load-detail">Blender 모델과 재질 준비</span><button id="retry" hidden>다시 시도</button></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div class="bottom-bar"><span id="navigation-hint">드래그: 둘러보기 · 스크롤: 확대 · 3D 버튼 클릭: 호출</span><button id="reset">시점 초기화 ↺</button></div>
+    <div id="walk-pad" hidden><button data-move="forward" aria-label="앞으로">↑</button><button data-move="left" aria-label="왼쪽으로">←</button><button data-move="backward" aria-label="뒤로">↓</button><button data-move="right" aria-label="오른쪽으로">→</button></div>
+  </div>
+</main>
+<script type="module" src="./app.js"></script>
+</body></html>

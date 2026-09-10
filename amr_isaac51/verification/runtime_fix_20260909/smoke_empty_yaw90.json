@@ -1,0 +1,315 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "failures": [],
+  "motion": {
+    "requested": true,
+    "forward_m": 0.25871021963409646,
+    "lateral_m": 0.07626939461648519,
+    "yaw_change_rad": 0.11437977011951911,
+    "stopped_vx_mps": 2.0315567311966705e-06,
+    "stopped_wz_radps": 2.8901879381203914e-12,
+    "maneuvers": {
+      "reverse": {
+        "forward_m": -0.206943945686984,
+        "distance_m": 0.20739478061932579,
+        "yaw_change_rad": 0.06688000224765897,
+        "stopped_vx_mps": 2.3229499977104927e-06,
+        "stopped_wz_radps": 1.7069678113358694e-12
+      },
+      "left": {
+        "forward_m": -0.03291347009989792,
+        "distance_m": 0.03318584018702405,
+        "yaw_change_rad": 0.6224987757037107,
+        "stopped_vx_mps": 1.2583888612248523e-06,
+        "stopped_wz_radps": 1.865174584093828e-13
+      },
+      "right": {
+        "forward_m": -0.023777695888489915,
+        "distance_m": 0.026068704993403847,
+        "yaw_change_rad": -0.49134027525386376,
+        "stopped_vx_mps": 3.037734232973973e-07,
+        "stopped_wz_radps": 3.463895656174252e-13
+      }
+    }
+  },
+  "topics": {
+    "/clock": {
+      "count": 2441,
+      "wall_hz": 116.94,
+      "age_wall_s": 0.0,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "sim_seconds": 20.6583
+      }
+    },
+    "/odom": {
+      "count": 1220,
+      "wall_hz": 57.34,
+      "age_wall_s": 0.02,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "odom",
+        "child_frame": "base_footprint",
+        "xy": [
+          -0.001,
+          0.019
+        ],
+        "vx": -0.0,
+        "wz": 0.0
+      }
+    },
+    "/joint_states": {
+      "count": 1220,
+      "wall_hz": 57.34,
+      "age_wall_s": 0.02,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "",
+        "joint_names": [
+          "left_drive_joint",
+          "right_drive_joint",
+          "caster_fl_swivel_joint",
+          "caster_fr_swivel_joint",
+          "caster_rl_swivel_joint",
+          "caster_rr_swivel_joint",
+          "caster_fl_roll_joint",
+          "caster_fr_roll_joint",
+          "caster_rl_roll_joint",
+          "caster_rr_roll_joint"
+        ]
+      }
+    },
+    "/tf": {
+      "count": 1220,
+      "wall_hz": 57.34,
+      "age_wall_s": 0.02,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "transforms": 12
+      }
+    },
+    "/tf_static": {
+      "count": 1,
+      "wall_hz": 0.0,
+      "age_wall_s": 20.88,
+      "stamp_advanced": false,
+      "errors": [],
+      "details": {
+        "transforms": 6
+      }
+    },
+    "/front_camera/color/image_raw": {
+      "count": 114,
+      "wall_hz": 5.73,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_camera_optical_frame",
+        "width": 640,
+        "height": 360,
+        "encoding": "rgb8"
+      }
+    },
+    "/front_camera/color/camera_info": {
+      "count": 300,
+      "wall_hz": 14.44,
+      "age_wall_s": 0.1,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_camera_optical_frame",
+        "width": 640,
+        "height": 360
+      }
+    },
+    "/front_camera/depth/image_raw": {
+      "count": 295,
+      "wall_hz": 14.24,
+      "age_wall_s": 0.1,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_camera_optical_frame",
+        "width": 640,
+        "height": 360,
+        "encoding": "32FC1",
+        "finite_depth_samples": 38,
+        "sample_depth_m": [
+          0.515,
+          5.513
+        ]
+      }
+    },
+    "/front_camera/depth/camera_info": {
+      "count": 305,
+      "wall_hz": 14.54,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_camera_optical_frame",
+        "width": 640,
+        "height": 360
+      }
+    },
+    "/rear_camera/color/image_raw": {
+      "count": 300,
+      "wall_hz": 14.33,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_camera_optical_frame",
+        "width": 640,
+        "height": 360,
+        "encoding": "rgb8"
+      }
+    },
+    "/rear_camera/color/camera_info": {
+      "count": 301,
+      "wall_hz": 14.44,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_camera_optical_frame",
+        "width": 640,
+        "height": 360
+      }
+    },
+    "/rear_camera/depth/image_raw": {
+      "count": 296,
+      "wall_hz": 14.24,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_camera_optical_frame",
+        "width": 640,
+        "height": 360,
+        "encoding": "32FC1",
+        "finite_depth_samples": 38,
+        "sample_depth_m": [
+          0.515,
+          5.623
+        ]
+      }
+    },
+    "/rear_camera/depth/camera_info": {
+      "count": 305,
+      "wall_hz": 14.54,
+      "age_wall_s": 0.03,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_camera_optical_frame",
+        "width": 640,
+        "height": 360
+      }
+    },
+    "/front_right_lidar/scan": {
+      "count": 204,
+      "wall_hz": 9.69,
+      "age_wall_s": 0.06,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "front_right_lidar_link",
+        "beams": 541,
+        "finite_returns": 541
+      }
+    },
+    "/rear_left_lidar/scan": {
+      "count": 204,
+      "wall_hz": 9.69,
+      "age_wall_s": 0.05,
+      "stamp_advanced": true,
+      "errors": [],
+      "details": {
+        "frame": "rear_left_lidar_link",
+        "beams": 541,
+        "finite_returns": 541
+      }
+    }
+  },
+  "tf_edges": [
+    [
+      "base_footprint",
+      "base_link"
+    ],
+    [
+      "base_link",
+      "caster_fl_swivel"
+    ],
+    [
+      "base_link",
+      "caster_fr_swivel"
+    ],
+    [
+      "base_link",
+      "caster_rl_swivel"
+    ],
+    [
+      "base_link",
+      "caster_rr_swivel"
+    ],
+    [
+      "base_link",
+      "front_camera_link"
+    ],
+    [
+      "base_link",
+      "front_right_lidar_link"
+    ],
+    [
+      "base_link",
+      "left_drive"
+    ],
+    [
+      "base_link",
+      "rear_camera_link"
+    ],
+    [
+      "base_link",
+      "rear_left_lidar_link"
+    ],
+    [
+      "base_link",
+      "right_drive"
+    ],
+    [
+      "caster_fl_swivel",
+      "caster_fl_wheel"
+    ],
+    [
+      "caster_fr_swivel",
+      "caster_fr_wheel"
+    ],
+    [
+      "caster_rl_swivel",
+      "caster_rl_wheel"
+    ],
+    [
+      "caster_rr_swivel",
+      "caster_rr_wheel"
+    ],
+    [
+      "front_camera_link",
+      "front_camera_optical_frame"
+    ],
+    [
+      "odom",
+      "base_footprint"
+    ],
+    [
+      "rear_camera_link",
+      "rear_camera_optical_frame"
+    ]
+  ]
+}

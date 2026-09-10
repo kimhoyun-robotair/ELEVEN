@@ -1,0 +1,529 @@
+{
+  "scope": "OpenUSD offline structure, geometry, units, mass, joint frames, sensor axes and dependencies",
+  "usd_validator_version": "0.26.8",
+  "isaac_sim_executed": false,
+  "physx_or_rtx_execution_verified": false,
+  "ros_dds_streams_verified": false,
+  "note": "Raw PhysxSchema property tokens are inspected as authored USD; this does not load or validate NVIDIA PhysX behavior.",
+  "passed": true,
+  "checks_passed": 85,
+  "checks_total": 85,
+  "checks": [
+    {
+      "name": "robot.usd: stage opens and default prim matches",
+      "passed": true
+    },
+    {
+      "name": "robot.usd: units are metres/kilograms with Z up",
+      "passed": true
+    },
+    {
+      "name": "robot.usd: no composition errors",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "robot.usd: all asset dependencies resolve",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "robot.usd: dependencies are local and inside this package",
+      "passed": true
+    },
+    {
+      "name": "robot.usd: rigid-link masses sum to requested mass",
+      "passed": true,
+      "observed": {
+        "sum_kg": 100.0,
+        "expected_kg": 100.0
+      }
+    },
+    {
+      "name": "robot.usda: stage opens and default prim matches",
+      "passed": true
+    },
+    {
+      "name": "robot.usda: units are metres/kilograms with Z up",
+      "passed": true
+    },
+    {
+      "name": "robot.usda: no composition errors",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "robot.usda: all asset dependencies resolve",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "robot.usda: dependencies are local and inside this package",
+      "passed": true
+    },
+    {
+      "name": "robot.usda: rigid-link masses sum to requested mass",
+      "passed": true,
+      "observed": {
+        "sum_kg": 100.0,
+        "expected_kg": 100.0
+      }
+    },
+    {
+      "name": "test_world.usd: stage opens and default prim matches",
+      "passed": true
+    },
+    {
+      "name": "test_world.usd: units are metres/kilograms with Z up",
+      "passed": true
+    },
+    {
+      "name": "test_world.usd: no composition errors",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "test_world.usd: all asset dependencies resolve",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "test_world.usd: dependencies are local and inside this package",
+      "passed": true
+    },
+    {
+      "name": "test_world.usd: rigid-link masses sum to requested mass",
+      "passed": true,
+      "observed": {
+        "sum_kg": 100.0,
+        "expected_kg": 100.0
+      }
+    },
+    {
+      "name": "test_world.usd: exactly one authored physics scene",
+      "passed": true,
+      "observed": [
+        "/World/PhysicsScene"
+      ]
+    },
+    {
+      "name": "test_world.usd: downward Earth gravity",
+      "passed": true
+    },
+    {
+      "name": "test_world.usd: static ground collider at z=0",
+      "passed": true
+    },
+    {
+      "name": "test_world_payload250.usd: stage opens and default prim matches",
+      "passed": true
+    },
+    {
+      "name": "test_world_payload250.usd: units are metres/kilograms with Z up",
+      "passed": true
+    },
+    {
+      "name": "test_world_payload250.usd: no composition errors",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "test_world_payload250.usd: all asset dependencies resolve",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "test_world_payload250.usd: dependencies are local and inside this package",
+      "passed": true
+    },
+    {
+      "name": "test_world_payload250.usd: rigid-link masses sum to requested mass",
+      "passed": true,
+      "observed": {
+        "sum_kg": 350.0,
+        "expected_kg": 350.0
+      }
+    },
+    {
+      "name": "test_world_payload250.usd: exactly one authored physics scene",
+      "passed": true,
+      "observed": [
+        "/World/PhysicsScene"
+      ]
+    },
+    {
+      "name": "test_world_payload250.usd: downward Earth gravity",
+      "passed": true
+    },
+    {
+      "name": "test_world_payload250.usd: static ground collider at z=0",
+      "passed": true
+    },
+    {
+      "name": "robot: one articulation root",
+      "passed": true
+    },
+    {
+      "name": "robot: 11 rigid bodies (base, 2 drive wheels, 4 swivels, 4 caster wheels)",
+      "passed": true,
+      "observed": [
+        "/Robot/base_link",
+        "/Robot/caster_fl_swivel",
+        "/Robot/caster_fl_wheel",
+        "/Robot/caster_fr_swivel",
+        "/Robot/caster_fr_wheel",
+        "/Robot/caster_rl_swivel",
+        "/Robot/caster_rl_wheel",
+        "/Robot/caster_rr_swivel",
+        "/Robot/caster_rr_wheel",
+        "/Robot/left_drive",
+        "/Robot/right_drive"
+      ]
+    },
+    {
+      "name": "robot: 10 revolute joints",
+      "passed": true
+    },
+    {
+      "name": "robot: no nested rigid-body prims",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "robot: articulation self collisions explicitly disabled",
+      "passed": true
+    },
+    {
+      "name": "left_drive_joint: force-limited pure velocity drive",
+      "passed": true
+    },
+    {
+      "name": "left_drive_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "right_drive_joint: force-limited pure velocity drive",
+      "passed": true
+    },
+    {
+      "name": "right_drive_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "caster_fl_swivel_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "caster_fl_roll_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "caster_fr_swivel_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "caster_fr_roll_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "caster_rl_swivel_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "caster_rl_roll_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "caster_rr_swivel_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "caster_rr_roll_joint: no finite joint travel limits",
+      "passed": true
+    },
+    {
+      "name": "robot: joint endpoints reference rigid links",
+      "passed": true
+    },
+    {
+      "name": "robot: all joint anchors coincide in world coordinates",
+      "passed": true,
+      "observed": [
+        {
+          "joint": "left_drive_joint",
+          "gap_m": 5.415911025104552e-09
+        },
+        {
+          "joint": "right_drive_joint",
+          "gap_m": 5.415911025104552e-09
+        },
+        {
+          "joint": "caster_fl_swivel_joint",
+          "gap_m": 1.2003530498138505e-08
+        },
+        {
+          "joint": "caster_fl_roll_joint",
+          "gap_m": 1.413648284709819e-09
+        },
+        {
+          "joint": "caster_fr_swivel_joint",
+          "gap_m": 1.2003530498138505e-08
+        },
+        {
+          "joint": "caster_fr_roll_joint",
+          "gap_m": 1.413648284709819e-09
+        },
+        {
+          "joint": "caster_rl_swivel_joint",
+          "gap_m": 1.2003530498138505e-08
+        },
+        {
+          "joint": "caster_rl_roll_joint",
+          "gap_m": 1.413648284709819e-09
+        },
+        {
+          "joint": "caster_rr_swivel_joint",
+          "gap_m": 1.2003530498138505e-08
+        },
+        {
+          "joint": "caster_rr_roll_joint",
+          "gap_m": 1.413648284709819e-09
+        }
+      ]
+    },
+    {
+      "name": "robot: joint axes match across both body frames",
+      "passed": true
+    },
+    {
+      "name": "robot: exactly two powered drive joints",
+      "passed": true,
+      "observed": [
+        "left_drive_joint",
+        "right_drive_joint"
+      ]
+    },
+    {
+      "name": "robot: eight unactuated caster joints",
+      "passed": true,
+      "observed": [
+        "caster_fl_swivel_joint",
+        "caster_fl_roll_joint",
+        "caster_fr_swivel_joint",
+        "caster_fr_roll_joint",
+        "caster_rl_swivel_joint",
+        "caster_rl_roll_joint",
+        "caster_rr_swivel_joint",
+        "caster_rr_roll_joint"
+      ]
+    },
+    {
+      "name": "robot: connected acyclic articulation tree rooted at base_link",
+      "passed": true
+    },
+    {
+      "name": "base_link: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "left_drive: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "right_drive: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "caster_fl_swivel: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "caster_fl_wheel: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "caster_fr_swivel: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "caster_fr_wheel: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "caster_rl_swivel: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "caster_rl_wheel: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "caster_rr_swivel: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "caster_rr_wheel: finite positive mass and physically possible inertia",
+      "passed": true
+    },
+    {
+      "name": "robot: visible envelope exactly matches 800x580x245 mm specification",
+      "passed": true,
+      "observed": {
+        "min_m": [
+          -0.4000000059604645,
+          -0.2900000000237487,
+          -1.4901161138336505e-09
+        ],
+        "max_m": [
+          0.4000000059604645,
+          0.28999999165534973,
+          0.2449999999974738
+        ],
+        "size_m": [
+          0.800000011920929,
+          0.5799999916790984,
+          0.2450000014875899
+        ],
+        "tolerance_m": 1e-05
+      }
+    },
+    {
+      "name": "robot: visible envelope centred in XY with ground-contact bottom",
+      "passed": true
+    },
+    {
+      "name": "left_drive: correct cylindrical road collider tangent to ground",
+      "passed": true
+    },
+    {
+      "name": "right_drive: correct cylindrical road collider tangent to ground",
+      "passed": true
+    },
+    {
+      "name": "caster_fl_wheel: correct cylindrical road collider tangent to ground",
+      "passed": true
+    },
+    {
+      "name": "caster_fr_wheel: correct cylindrical road collider tangent to ground",
+      "passed": true
+    },
+    {
+      "name": "caster_rl_wheel: correct cylindrical road collider tangent to ground",
+      "passed": true
+    },
+    {
+      "name": "caster_rr_wheel: correct cylindrical road collider tangent to ground",
+      "passed": true
+    },
+    {
+      "name": "robot: drive wheel centre separation matches controller track",
+      "passed": true
+    },
+    {
+      "name": "front: camera position agrees with configuration",
+      "passed": true
+    },
+    {
+      "name": "front: USD camera -Z points outward and +Y points up",
+      "passed": true
+    },
+    {
+      "name": "front: camera FOV and aspect match declared stream",
+      "passed": true
+    },
+    {
+      "name": "front: ROS optical conversion has +Z forward and +Y down",
+      "passed": true
+    },
+    {
+      "name": "rear: camera position agrees with configuration",
+      "passed": true
+    },
+    {
+      "name": "rear: USD camera -Z points outward and +Y points up",
+      "passed": true
+    },
+    {
+      "name": "rear: camera FOV and aspect match declared stream",
+      "passed": true
+    },
+    {
+      "name": "rear: ROS optical conversion has +Z forward and +Y down",
+      "passed": true
+    },
+    {
+      "name": "front_right: LiDAR position and outward yaw agree with configuration",
+      "passed": true
+    },
+    {
+      "name": "rear_left: LiDAR position and outward yaw agree with configuration",
+      "passed": true
+    },
+    {
+      "name": "payload: composite base mass and centre of mass are correct",
+      "passed": true
+    },
+    {
+      "name": "payload: fixed geometry bottom touches deck top without penetration",
+      "passed": true
+    }
+  ],
+  "details": {
+    "road_contact_wheels": [
+      {
+        "link": "left_drive",
+        "centre_m": [
+          0.0,
+          0.24,
+          0.1
+        ],
+        "radius_m": 0.1
+      },
+      {
+        "link": "right_drive",
+        "centre_m": [
+          0.0,
+          -0.24,
+          0.1
+        ],
+        "radius_m": 0.1
+      },
+      {
+        "link": "caster_fl_wheel",
+        "centre_m": [
+          0.27999999999999997,
+          0.22,
+          0.04
+        ],
+        "radius_m": 0.04
+      },
+      {
+        "link": "caster_fr_wheel",
+        "centre_m": [
+          0.27999999999999997,
+          -0.22,
+          0.04
+        ],
+        "radius_m": 0.04
+      },
+      {
+        "link": "caster_rl_wheel",
+        "centre_m": [
+          -0.32,
+          0.22,
+          0.04
+        ],
+        "radius_m": 0.04
+      },
+      {
+        "link": "caster_rr_wheel",
+        "centre_m": [
+          -0.32,
+          -0.22,
+          0.04
+        ],
+        "radius_m": 0.04
+      }
+    ]
+  }
+}

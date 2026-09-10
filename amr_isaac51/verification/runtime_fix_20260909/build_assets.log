@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/hoyunkim/amr_isaac51/model/build_assets.py", line 10, in <module>
+    from pxr import Gf, Sdf, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade, Vt
+ModuleNotFoundError: No module named 'pxr'
+There was an error running python

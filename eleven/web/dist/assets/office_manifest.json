@@ -1,0 +1,1385 @@
+{
+  "schemaVersion": 1,
+  "world": "office",
+  "units": "meters",
+  "upAxis": "Z",
+  "floorHeights": [
+    0,
+    3.6,
+    7.2,
+    10.8
+  ],
+  "footprint": [
+    30,
+    24
+  ],
+  "shaftHoles": [
+    [
+      -12.0,
+      -9.0,
+      7.0,
+      10.0
+    ],
+    [
+      -5.0,
+      -2.0,
+      7.0,
+      10.0
+    ],
+    [
+      2.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    [
+      9.0,
+      12.0,
+      7.0,
+      10.0
+    ]
+  ],
+  "floorGroups": [
+    "Building_Floor_0",
+    "Building_Floor_1",
+    "Building_Floor_2",
+    "Building_Floor_3"
+  ],
+  "furnitureFloorGroups": [
+    "Furniture_Floor_0",
+    "Furniture_Floor_1",
+    "Furniture_Floor_2",
+    "Furniture_Floor_3"
+  ],
+  "roofNode": "Building_Roof",
+  "elevators": [
+    {
+      "id": "E1",
+      "type": "opaque",
+      "position": [
+        -10.5,
+        8.5,
+        0
+      ],
+      "floorHeights": [
+        0,
+        3.6,
+        7.2,
+        10.8
+      ],
+      "doorTravel": 0.72,
+      "entryLocal": [
+        0,
+        -1.2,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ],
+      "cabinDimensions": {
+        "width": 2.4,
+        "depth": 2.4,
+        "height": 2.7,
+        "interiorWidth": 2.135,
+        "interiorDepth": 2.29,
+        "floorTop": 0,
+        "doorY": -1.24,
+        "doorPanelWidth": 0.706
+      },
+      "cabinNode": "E1_Cabin",
+      "cabinDoorNodes": {
+        "left": "E1_Cabin_Door_Left",
+        "right": "E1_Cabin_Door_Right"
+      },
+      "landingDoorNodes": [
+        {
+          "floor": 0,
+          "z": 0,
+          "left": "E1_Landing_F0_Left",
+          "right": "E1_Landing_F0_Right"
+        },
+        {
+          "floor": 1,
+          "z": 3.6,
+          "left": "E1_Landing_F1_Left",
+          "right": "E1_Landing_F1_Right"
+        },
+        {
+          "floor": 2,
+          "z": 7.2,
+          "left": "E1_Landing_F2_Left",
+          "right": "E1_Landing_F2_Right"
+        },
+        {
+          "floor": 3,
+          "z": 10.8,
+          "left": "E1_Landing_F3_Left",
+          "right": "E1_Landing_F3_Right"
+        }
+      ],
+      "buttons": [
+        {
+          "node": "E1_Floor_0_Lamp",
+          "groupNode": "E1_Floor_0",
+          "material": "E1_Floor_0_Lamp_mat",
+          "floor": 0,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E1/Cabin/Panel/Floor_0"
+        },
+        {
+          "node": "E1_Floor_1_Lamp",
+          "groupNode": "E1_Floor_1",
+          "material": "E1_Floor_1_Lamp_mat",
+          "floor": 1,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E1/Cabin/Panel/Floor_1"
+        },
+        {
+          "node": "E1_Floor_2_Lamp",
+          "groupNode": "E1_Floor_2",
+          "material": "E1_Floor_2_Lamp_mat",
+          "floor": 2,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E1/Cabin/Panel/Floor_2"
+        },
+        {
+          "node": "E1_Floor_3_Lamp",
+          "groupNode": "E1_Floor_3",
+          "material": "E1_Floor_3_Lamp_mat",
+          "floor": 3,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E1/Cabin/Panel/Floor_3"
+        },
+        {
+          "node": "E1_Open_Lamp",
+          "groupNode": "E1_Open",
+          "material": "E1_Open_Lamp_mat",
+          "floor": null,
+          "type": "open",
+          "direction": null,
+          "path": "/World/Elevators/E1/Cabin/Panel/Open"
+        },
+        {
+          "node": "E1_Close_Lamp",
+          "groupNode": "E1_Close",
+          "material": "E1_Close_Lamp_mat",
+          "floor": null,
+          "type": "close",
+          "direction": null,
+          "path": "/World/Elevators/E1/Cabin/Panel/Close"
+        },
+        {
+          "node": "E1_Alarm_Lamp",
+          "groupNode": "E1_Alarm",
+          "material": "E1_Alarm_Lamp_mat",
+          "floor": null,
+          "type": "alarm",
+          "direction": null,
+          "path": "/World/Elevators/E1/Cabin/Panel/Alarm"
+        },
+        {
+          "node": "E1_Hall_F0_Up_Lamp",
+          "groupNode": "E1_Hall_F0_Up",
+          "material": "E1_Hall_F0_Up_Lamp_mat",
+          "floor": 0,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E1/HallButtons/Floor_0/Up"
+        },
+        {
+          "node": "E1_Hall_F1_Up_Lamp",
+          "groupNode": "E1_Hall_F1_Up",
+          "material": "E1_Hall_F1_Up_Lamp_mat",
+          "floor": 1,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E1/HallButtons/Floor_1/Up"
+        },
+        {
+          "node": "E1_Hall_F1_Down_Lamp",
+          "groupNode": "E1_Hall_F1_Down",
+          "material": "E1_Hall_F1_Down_Lamp_mat",
+          "floor": 1,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E1/HallButtons/Floor_1/Down"
+        },
+        {
+          "node": "E1_Hall_F2_Up_Lamp",
+          "groupNode": "E1_Hall_F2_Up",
+          "material": "E1_Hall_F2_Up_Lamp_mat",
+          "floor": 2,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E1/HallButtons/Floor_2/Up"
+        },
+        {
+          "node": "E1_Hall_F2_Down_Lamp",
+          "groupNode": "E1_Hall_F2_Down",
+          "material": "E1_Hall_F2_Down_Lamp_mat",
+          "floor": 2,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E1/HallButtons/Floor_2/Down"
+        },
+        {
+          "node": "E1_Hall_F3_Down_Lamp",
+          "groupNode": "E1_Hall_F3_Down",
+          "material": "E1_Hall_F3_Down_Lamp_mat",
+          "floor": 3,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E1/HallButtons/Floor_3/Down"
+        }
+      ],
+      "sourcePaths": {
+        "root": "/World/Elevators/E1",
+        "cabin": "/World/Elevators/E1/E1_Cabin",
+        "doors": {
+          "left": "/World/Elevators/E1/E1_Cabin/E1_Cabin_Doors/E1_Cabin_Door_Left",
+          "right": "/World/Elevators/E1/E1_Cabin/E1_Cabin_Doors/E1_Cabin_Door_Right"
+        }
+      }
+    },
+    {
+      "id": "E2",
+      "type": "glass",
+      "position": [
+        -3.5,
+        8.5,
+        0
+      ],
+      "floorHeights": [
+        0,
+        3.6,
+        7.2,
+        10.8
+      ],
+      "doorTravel": 0.72,
+      "entryLocal": [
+        0,
+        -1.2,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ],
+      "cabinDimensions": {
+        "width": 2.4,
+        "depth": 2.4,
+        "height": 2.7,
+        "interiorWidth": 2.135,
+        "interiorDepth": 2.29,
+        "floorTop": 0,
+        "doorY": -1.24,
+        "doorPanelWidth": 0.706
+      },
+      "cabinNode": "E2_Cabin",
+      "cabinDoorNodes": {
+        "left": "E2_Cabin_Door_Left",
+        "right": "E2_Cabin_Door_Right"
+      },
+      "landingDoorNodes": [
+        {
+          "floor": 0,
+          "z": 0,
+          "left": "E2_Landing_F0_Left",
+          "right": "E2_Landing_F0_Right"
+        },
+        {
+          "floor": 1,
+          "z": 3.6,
+          "left": "E2_Landing_F1_Left",
+          "right": "E2_Landing_F1_Right"
+        },
+        {
+          "floor": 2,
+          "z": 7.2,
+          "left": "E2_Landing_F2_Left",
+          "right": "E2_Landing_F2_Right"
+        },
+        {
+          "floor": 3,
+          "z": 10.8,
+          "left": "E2_Landing_F3_Left",
+          "right": "E2_Landing_F3_Right"
+        }
+      ],
+      "buttons": [
+        {
+          "node": "E2_Floor_0_Lamp",
+          "groupNode": "E2_Floor_0",
+          "material": "E2_Floor_0_Lamp_mat",
+          "floor": 0,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E2/Cabin/Panel/Floor_0"
+        },
+        {
+          "node": "E2_Floor_1_Lamp",
+          "groupNode": "E2_Floor_1",
+          "material": "E2_Floor_1_Lamp_mat",
+          "floor": 1,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E2/Cabin/Panel/Floor_1"
+        },
+        {
+          "node": "E2_Floor_2_Lamp",
+          "groupNode": "E2_Floor_2",
+          "material": "E2_Floor_2_Lamp_mat",
+          "floor": 2,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E2/Cabin/Panel/Floor_2"
+        },
+        {
+          "node": "E2_Floor_3_Lamp",
+          "groupNode": "E2_Floor_3",
+          "material": "E2_Floor_3_Lamp_mat",
+          "floor": 3,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E2/Cabin/Panel/Floor_3"
+        },
+        {
+          "node": "E2_Open_Lamp",
+          "groupNode": "E2_Open",
+          "material": "E2_Open_Lamp_mat",
+          "floor": null,
+          "type": "open",
+          "direction": null,
+          "path": "/World/Elevators/E2/Cabin/Panel/Open"
+        },
+        {
+          "node": "E2_Close_Lamp",
+          "groupNode": "E2_Close",
+          "material": "E2_Close_Lamp_mat",
+          "floor": null,
+          "type": "close",
+          "direction": null,
+          "path": "/World/Elevators/E2/Cabin/Panel/Close"
+        },
+        {
+          "node": "E2_Alarm_Lamp",
+          "groupNode": "E2_Alarm",
+          "material": "E2_Alarm_Lamp_mat",
+          "floor": null,
+          "type": "alarm",
+          "direction": null,
+          "path": "/World/Elevators/E2/Cabin/Panel/Alarm"
+        },
+        {
+          "node": "E2_Hall_F0_Up_Lamp",
+          "groupNode": "E2_Hall_F0_Up",
+          "material": "E2_Hall_F0_Up_Lamp_mat",
+          "floor": 0,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E2/HallButtons/Floor_0/Up"
+        },
+        {
+          "node": "E2_Hall_F1_Up_Lamp",
+          "groupNode": "E2_Hall_F1_Up",
+          "material": "E2_Hall_F1_Up_Lamp_mat",
+          "floor": 1,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E2/HallButtons/Floor_1/Up"
+        },
+        {
+          "node": "E2_Hall_F1_Down_Lamp",
+          "groupNode": "E2_Hall_F1_Down",
+          "material": "E2_Hall_F1_Down_Lamp_mat",
+          "floor": 1,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E2/HallButtons/Floor_1/Down"
+        },
+        {
+          "node": "E2_Hall_F2_Up_Lamp",
+          "groupNode": "E2_Hall_F2_Up",
+          "material": "E2_Hall_F2_Up_Lamp_mat",
+          "floor": 2,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E2/HallButtons/Floor_2/Up"
+        },
+        {
+          "node": "E2_Hall_F2_Down_Lamp",
+          "groupNode": "E2_Hall_F2_Down",
+          "material": "E2_Hall_F2_Down_Lamp_mat",
+          "floor": 2,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E2/HallButtons/Floor_2/Down"
+        },
+        {
+          "node": "E2_Hall_F3_Down_Lamp",
+          "groupNode": "E2_Hall_F3_Down",
+          "material": "E2_Hall_F3_Down_Lamp_mat",
+          "floor": 3,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E2/HallButtons/Floor_3/Down"
+        }
+      ],
+      "sourcePaths": {
+        "root": "/World/Elevators/E2",
+        "cabin": "/World/Elevators/E2/E2_Cabin",
+        "doors": {
+          "left": "/World/Elevators/E2/E2_Cabin/E2_Cabin_Doors/E2_Cabin_Door_Left",
+          "right": "/World/Elevators/E2/E2_Cabin/E2_Cabin_Doors/E2_Cabin_Door_Right"
+        }
+      }
+    },
+    {
+      "id": "E3",
+      "type": "opaque",
+      "position": [
+        3.5,
+        8.5,
+        0
+      ],
+      "floorHeights": [
+        0,
+        3.6,
+        7.2,
+        10.8
+      ],
+      "doorTravel": 0.72,
+      "entryLocal": [
+        0,
+        -1.2,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ],
+      "cabinDimensions": {
+        "width": 2.4,
+        "depth": 2.4,
+        "height": 2.7,
+        "interiorWidth": 2.135,
+        "interiorDepth": 2.29,
+        "floorTop": 0,
+        "doorY": -1.24,
+        "doorPanelWidth": 0.706
+      },
+      "cabinNode": "E3_Cabin",
+      "cabinDoorNodes": {
+        "left": "E3_Cabin_Door_Left",
+        "right": "E3_Cabin_Door_Right"
+      },
+      "landingDoorNodes": [
+        {
+          "floor": 0,
+          "z": 0,
+          "left": "E3_Landing_F0_Left",
+          "right": "E3_Landing_F0_Right"
+        },
+        {
+          "floor": 1,
+          "z": 3.6,
+          "left": "E3_Landing_F1_Left",
+          "right": "E3_Landing_F1_Right"
+        },
+        {
+          "floor": 2,
+          "z": 7.2,
+          "left": "E3_Landing_F2_Left",
+          "right": "E3_Landing_F2_Right"
+        },
+        {
+          "floor": 3,
+          "z": 10.8,
+          "left": "E3_Landing_F3_Left",
+          "right": "E3_Landing_F3_Right"
+        }
+      ],
+      "buttons": [
+        {
+          "node": "E3_Floor_0_Lamp",
+          "groupNode": "E3_Floor_0",
+          "material": "E3_Floor_0_Lamp_mat",
+          "floor": 0,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E3/Cabin/Panel/Floor_0"
+        },
+        {
+          "node": "E3_Floor_1_Lamp",
+          "groupNode": "E3_Floor_1",
+          "material": "E3_Floor_1_Lamp_mat",
+          "floor": 1,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E3/Cabin/Panel/Floor_1"
+        },
+        {
+          "node": "E3_Floor_2_Lamp",
+          "groupNode": "E3_Floor_2",
+          "material": "E3_Floor_2_Lamp_mat",
+          "floor": 2,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E3/Cabin/Panel/Floor_2"
+        },
+        {
+          "node": "E3_Floor_3_Lamp",
+          "groupNode": "E3_Floor_3",
+          "material": "E3_Floor_3_Lamp_mat",
+          "floor": 3,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E3/Cabin/Panel/Floor_3"
+        },
+        {
+          "node": "E3_Open_Lamp",
+          "groupNode": "E3_Open",
+          "material": "E3_Open_Lamp_mat",
+          "floor": null,
+          "type": "open",
+          "direction": null,
+          "path": "/World/Elevators/E3/Cabin/Panel/Open"
+        },
+        {
+          "node": "E3_Close_Lamp",
+          "groupNode": "E3_Close",
+          "material": "E3_Close_Lamp_mat",
+          "floor": null,
+          "type": "close",
+          "direction": null,
+          "path": "/World/Elevators/E3/Cabin/Panel/Close"
+        },
+        {
+          "node": "E3_Alarm_Lamp",
+          "groupNode": "E3_Alarm",
+          "material": "E3_Alarm_Lamp_mat",
+          "floor": null,
+          "type": "alarm",
+          "direction": null,
+          "path": "/World/Elevators/E3/Cabin/Panel/Alarm"
+        },
+        {
+          "node": "E3_Hall_F0_Up_Lamp",
+          "groupNode": "E3_Hall_F0_Up",
+          "material": "E3_Hall_F0_Up_Lamp_mat",
+          "floor": 0,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E3/HallButtons/Floor_0/Up"
+        },
+        {
+          "node": "E3_Hall_F1_Up_Lamp",
+          "groupNode": "E3_Hall_F1_Up",
+          "material": "E3_Hall_F1_Up_Lamp_mat",
+          "floor": 1,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E3/HallButtons/Floor_1/Up"
+        },
+        {
+          "node": "E3_Hall_F1_Down_Lamp",
+          "groupNode": "E3_Hall_F1_Down",
+          "material": "E3_Hall_F1_Down_Lamp_mat",
+          "floor": 1,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E3/HallButtons/Floor_1/Down"
+        },
+        {
+          "node": "E3_Hall_F2_Up_Lamp",
+          "groupNode": "E3_Hall_F2_Up",
+          "material": "E3_Hall_F2_Up_Lamp_mat",
+          "floor": 2,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E3/HallButtons/Floor_2/Up"
+        },
+        {
+          "node": "E3_Hall_F2_Down_Lamp",
+          "groupNode": "E3_Hall_F2_Down",
+          "material": "E3_Hall_F2_Down_Lamp_mat",
+          "floor": 2,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E3/HallButtons/Floor_2/Down"
+        },
+        {
+          "node": "E3_Hall_F3_Down_Lamp",
+          "groupNode": "E3_Hall_F3_Down",
+          "material": "E3_Hall_F3_Down_Lamp_mat",
+          "floor": 3,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E3/HallButtons/Floor_3/Down"
+        }
+      ],
+      "sourcePaths": {
+        "root": "/World/Elevators/E3",
+        "cabin": "/World/Elevators/E3/E3_Cabin",
+        "doors": {
+          "left": "/World/Elevators/E3/E3_Cabin/E3_Cabin_Doors/E3_Cabin_Door_Left",
+          "right": "/World/Elevators/E3/E3_Cabin/E3_Cabin_Doors/E3_Cabin_Door_Right"
+        }
+      }
+    },
+    {
+      "id": "E4",
+      "type": "glass",
+      "position": [
+        10.5,
+        8.5,
+        0
+      ],
+      "floorHeights": [
+        0,
+        3.6,
+        7.2,
+        10.8
+      ],
+      "doorTravel": 0.72,
+      "entryLocal": [
+        0,
+        -1.2,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ],
+      "cabinDimensions": {
+        "width": 2.4,
+        "depth": 2.4,
+        "height": 2.7,
+        "interiorWidth": 2.135,
+        "interiorDepth": 2.29,
+        "floorTop": 0,
+        "doorY": -1.24,
+        "doorPanelWidth": 0.706
+      },
+      "cabinNode": "E4_Cabin",
+      "cabinDoorNodes": {
+        "left": "E4_Cabin_Door_Left",
+        "right": "E4_Cabin_Door_Right"
+      },
+      "landingDoorNodes": [
+        {
+          "floor": 0,
+          "z": 0,
+          "left": "E4_Landing_F0_Left",
+          "right": "E4_Landing_F0_Right"
+        },
+        {
+          "floor": 1,
+          "z": 3.6,
+          "left": "E4_Landing_F1_Left",
+          "right": "E4_Landing_F1_Right"
+        },
+        {
+          "floor": 2,
+          "z": 7.2,
+          "left": "E4_Landing_F2_Left",
+          "right": "E4_Landing_F2_Right"
+        },
+        {
+          "floor": 3,
+          "z": 10.8,
+          "left": "E4_Landing_F3_Left",
+          "right": "E4_Landing_F3_Right"
+        }
+      ],
+      "buttons": [
+        {
+          "node": "E4_Floor_0_Lamp",
+          "groupNode": "E4_Floor_0",
+          "material": "E4_Floor_0_Lamp_mat",
+          "floor": 0,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E4/Cabin/Panel/Floor_0"
+        },
+        {
+          "node": "E4_Floor_1_Lamp",
+          "groupNode": "E4_Floor_1",
+          "material": "E4_Floor_1_Lamp_mat",
+          "floor": 1,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E4/Cabin/Panel/Floor_1"
+        },
+        {
+          "node": "E4_Floor_2_Lamp",
+          "groupNode": "E4_Floor_2",
+          "material": "E4_Floor_2_Lamp_mat",
+          "floor": 2,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E4/Cabin/Panel/Floor_2"
+        },
+        {
+          "node": "E4_Floor_3_Lamp",
+          "groupNode": "E4_Floor_3",
+          "material": "E4_Floor_3_Lamp_mat",
+          "floor": 3,
+          "type": "floor",
+          "direction": null,
+          "path": "/World/Elevators/E4/Cabin/Panel/Floor_3"
+        },
+        {
+          "node": "E4_Open_Lamp",
+          "groupNode": "E4_Open",
+          "material": "E4_Open_Lamp_mat",
+          "floor": null,
+          "type": "open",
+          "direction": null,
+          "path": "/World/Elevators/E4/Cabin/Panel/Open"
+        },
+        {
+          "node": "E4_Close_Lamp",
+          "groupNode": "E4_Close",
+          "material": "E4_Close_Lamp_mat",
+          "floor": null,
+          "type": "close",
+          "direction": null,
+          "path": "/World/Elevators/E4/Cabin/Panel/Close"
+        },
+        {
+          "node": "E4_Alarm_Lamp",
+          "groupNode": "E4_Alarm",
+          "material": "E4_Alarm_Lamp_mat",
+          "floor": null,
+          "type": "alarm",
+          "direction": null,
+          "path": "/World/Elevators/E4/Cabin/Panel/Alarm"
+        },
+        {
+          "node": "E4_Hall_F0_Up_Lamp",
+          "groupNode": "E4_Hall_F0_Up",
+          "material": "E4_Hall_F0_Up_Lamp_mat",
+          "floor": 0,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E4/HallButtons/Floor_0/Up"
+        },
+        {
+          "node": "E4_Hall_F1_Up_Lamp",
+          "groupNode": "E4_Hall_F1_Up",
+          "material": "E4_Hall_F1_Up_Lamp_mat",
+          "floor": 1,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E4/HallButtons/Floor_1/Up"
+        },
+        {
+          "node": "E4_Hall_F1_Down_Lamp",
+          "groupNode": "E4_Hall_F1_Down",
+          "material": "E4_Hall_F1_Down_Lamp_mat",
+          "floor": 1,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E4/HallButtons/Floor_1/Down"
+        },
+        {
+          "node": "E4_Hall_F2_Up_Lamp",
+          "groupNode": "E4_Hall_F2_Up",
+          "material": "E4_Hall_F2_Up_Lamp_mat",
+          "floor": 2,
+          "type": "hall",
+          "direction": "up",
+          "path": "/World/Elevators/E4/HallButtons/Floor_2/Up"
+        },
+        {
+          "node": "E4_Hall_F2_Down_Lamp",
+          "groupNode": "E4_Hall_F2_Down",
+          "material": "E4_Hall_F2_Down_Lamp_mat",
+          "floor": 2,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E4/HallButtons/Floor_2/Down"
+        },
+        {
+          "node": "E4_Hall_F3_Down_Lamp",
+          "groupNode": "E4_Hall_F3_Down",
+          "material": "E4_Hall_F3_Down_Lamp_mat",
+          "floor": 3,
+          "type": "hall",
+          "direction": "down",
+          "path": "/World/Elevators/E4/HallButtons/Floor_3/Down"
+        }
+      ],
+      "sourcePaths": {
+        "root": "/World/Elevators/E4",
+        "cabin": "/World/Elevators/E4/E4_Cabin",
+        "doors": {
+          "left": "/World/Elevators/E4/E4_Cabin/E4_Cabin_Doors/E4_Cabin_Door_Left",
+          "right": "/World/Elevators/E4/E4_Cabin/E4_Cabin_Doors/E4_Cabin_Door_Right"
+        }
+      }
+    }
+  ],
+  "clearanceAudit": [
+    {
+      "kind": "roomDoor",
+      "name": "Office_0_0_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        -11.4,
+        3.14,
+        0
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_0_1_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        -5.3,
+        3.14,
+        0
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_0_2_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        5.3,
+        3.14,
+        0
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_0_3_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        11.4,
+        3.14,
+        0
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_1_0_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        -11.4,
+        3.14,
+        3.6
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_1_1_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        -5.3,
+        3.14,
+        3.6
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_1_2_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        5.3,
+        3.14,
+        3.6
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_1_3_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        11.4,
+        3.14,
+        3.6
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_2_0_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        -11.4,
+        3.14,
+        7.2
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_2_1_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        -5.3,
+        3.14,
+        7.2
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_2_2_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        5.3,
+        3.14,
+        7.2
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_2_3_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        11.4,
+        3.14,
+        7.2
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_3_0_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        -11.4,
+        3.14,
+        10.8
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_3_1_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        -5.3,
+        3.14,
+        10.8
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_3_2_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        5.3,
+        3.14,
+        10.8
+      ]
+    },
+    {
+      "kind": "roomDoor",
+      "name": "Office_3_3_entry",
+      "clearWidth": 1.26,
+      "clearHeight": 2.26,
+      "center": [
+        11.4,
+        3.14,
+        10.8
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E1",
+      "floor": 0,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        -12.0,
+        -9.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        -10.5,
+        7.04,
+        0
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E1",
+      "floor": 1,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        -12.0,
+        -9.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        -10.5,
+        7.04,
+        3.6
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E1",
+      "floor": 2,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        -12.0,
+        -9.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        -10.5,
+        7.04,
+        7.2
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E1",
+      "floor": 3,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        -12.0,
+        -9.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        -10.5,
+        7.04,
+        10.8
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E2",
+      "floor": 0,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        -5.0,
+        -2.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        -3.5,
+        7.04,
+        0
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E2",
+      "floor": 1,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        -5.0,
+        -2.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        -3.5,
+        7.04,
+        3.6
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E2",
+      "floor": 2,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        -5.0,
+        -2.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        -3.5,
+        7.04,
+        7.2
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E2",
+      "floor": 3,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        -5.0,
+        -2.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        -3.5,
+        7.04,
+        10.8
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E3",
+      "floor": 0,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        2.0,
+        5.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        3.5,
+        7.04,
+        0
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E3",
+      "floor": 1,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        2.0,
+        5.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        3.5,
+        7.04,
+        3.6
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E3",
+      "floor": 2,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        2.0,
+        5.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        3.5,
+        7.04,
+        7.2
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E3",
+      "floor": 3,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        2.0,
+        5.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        3.5,
+        7.04,
+        10.8
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E4",
+      "floor": 0,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        9.0,
+        12.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        10.5,
+        7.04,
+        0
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E4",
+      "floor": 1,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        9.0,
+        12.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        10.5,
+        7.04,
+        3.6
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E4",
+      "floor": 2,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        9.0,
+        12.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        10.5,
+        7.04,
+        7.2
+      ]
+    },
+    {
+      "kind": "elevatorDoor",
+      "elevatorId": "E4",
+      "floor": 3,
+      "clearWidth": 1.44,
+      "clearHeight": 2.32,
+      "shaftBounds": [
+        9.0,
+        12.0,
+        7.0,
+        10.0
+      ],
+      "center": [
+        10.5,
+        7.04,
+        10.8
+      ]
+    }
+  ],
+  "cameraPresets": [
+    {
+      "name": "office_lobby",
+      "position": [
+        13.600000381469727,
+        4.5,
+        1.659999966621399
+      ],
+      "quaternion": [
+        0.5540977120399475,
+        0.5465490221977234,
+        0.44093769788742065,
+        0.4470277726650238
+      ],
+      "lens": 22.0
+    },
+    {
+      "name": "office_workplace",
+      "position": [
+        13.0,
+        -10.600000381469727,
+        1.649999976158142
+      ],
+      "quaternion": [
+        0.6509824395179749,
+        0.6312847137451172,
+        0.293464720249176,
+        0.3026216924190521
+      ],
+      "lens": 22.0
+    },
+    {
+      "name": "office_cabin_opaque",
+      "position": [
+        -10.5,
+        7.929999828338623,
+        1.600000023841858
+      ],
+      "quaternion": [
+        0.7643752694129944,
+        0.6447380781173706,
+        0.004241612274199724,
+        0.005028681829571724
+      ],
+      "lens": 16.0
+    },
+    {
+      "name": "office_cabin_glass",
+      "position": [
+        -3.5,
+        7.889999866485596,
+        1.600000023841858
+      ],
+      "quaternion": [
+        0.7603371143341064,
+        0.6494978666305542,
+        -0.004110575653612614,
+        -0.004812062252312899
+      ],
+      "lens": 16.0
+    }
+  ],
+  "source": "tools/build_worlds.py + tools/furniture.py",
+  "license": "CC0-1.0",
+  "artifacts": {
+    "blend": "assets/office.blend",
+    "geometry": "scenes/office_geometry.usdc",
+    "gltf": "assets/office.gltf",
+    "buffers": [
+      "assets/office_0.bin",
+      "assets/office_1.bin",
+      "assets/office_2.bin"
+    ]
+  },
+  "geometryStatistics": {
+    "objects": 12825,
+    "meshes": 505,
+    "polygons": 795557
+  },
+  "webAsset": "office.gltf",
+  "packaging": {
+    "kind": "glTF 2.0 external buffers",
+    "lossless": true,
+    "verifiedBufferViews": 1538,
+    "maxBufferBytes": 8388608
+  }
+}
