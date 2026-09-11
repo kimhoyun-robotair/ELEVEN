@@ -1,2 +1,0 @@
-# Asset assembly/verification outside Isaac Sim. Isaac ships its own USD.
-usd-core==25.5

@@ -1,0 +1,240 @@
+#usda 1.0
+(
+    defaultPrim = "Robot"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Robot" (
+    delete apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+    prepend references = @amr.usda@
+)
+{
+    over "base_link" (
+        prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+    )
+    {
+        bool physxArticulation:enabledSelfCollisions = 0
+        int physxArticulation:solverPositionIterationCount = 32
+        int physxArticulation:solverVelocityIterationCount = 4
+    }
+
+    def Xform "riser_link" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0.2565)
+        float3 physics:diagonalInertia = (0.537006, 0.559879, 0.171462)
+        float physics:mass = 8.10008
+        double3 xformOp:translate = (0, 0, 0.245)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Xform "visuals" (
+            prepend references = @components/riser.usda@</Component>
+        )
+        {
+            over "Base_plate" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Arm_plate" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Extrusion_column" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Extrusion_column_001" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Extrusion_column_002" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Extrusion_column_003" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Cross_rail_001" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Cross_rail_002" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Side_rail" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Side_rail_001" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Cross_rail_003" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Cross_rail" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Side_rail_002" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+
+            over "Side_rail_003" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+            }
+        }
+    }
+
+    def PhysicsFixedJoint "riser_joint"
+    {
+        rel physics:body0 = </Robot/base_link>
+        rel physics:body1 = </Robot/riser_link>
+        point3f physics:localPos0 = (0, 0, 0.095)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+    }
+
+    def Xform "nero" (
+        prepend references = @nero.usdc@
+    )
+    {
+        float xformOp:rotateZ = 180
+        double3 xformOp:translate = (0, 0, 0.795)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateZ"]
+
+        over "nero_gripper_base" (
+            prepend apiSchemas = ["PhysxContactReportAPI"]
+        )
+        {
+            float3 physics:diagonalInertia = (0.0014294423, 0.0012144694, 0.0008943182)
+            float physics:mass = 0.538
+            float physxContactReport:threshold = 0
+
+            def Xform "wrist_camera_link"
+            {
+                float xformOp:rotateY = -90
+                double3 xformOp:translate = (0.067, 0, 0.065)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateY"]
+
+                def Xform "visuals" (
+                    prepend references = @components/gemini305.usda@</Component>
+                )
+                {
+                }
+
+                def Camera "camera"
+                {
+                    float2 clippingRange = (0.04, 1)
+                    float focalLength = 9.770427
+                    float horizontalAperture = 20.955
+                    float verticalAperture = 13.096875
+                    float3 xformOp:rotateXYZ = (90, 0, -90)
+                    uniform token[] xformOpOrder = ["xformOp:rotateXYZ"]
+                }
+
+                def Cube "collision" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                )
+                {
+                    double size = 1
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (0.023, 0.042, 0.042)
+                    double3 xformOp:translate = (-0.0115, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                }
+            }
+
+            def Cube "camera_bracket"
+            {
+                color3f[] primvars:displayColor = [(0.38, 0.41, 0.44)]
+                double size = 1
+                float3 xformOp:scale = (0.008, 0.034, 0.024)
+                double3 xformOp:translate = (0.044, 0, 0.05)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Cylinder "stylus_shaft" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+            )
+            {
+                double height = 0.095
+                color3f[] primvars:displayColor = [(0.25, 0.28, 0.3)]
+                double radius = 0.004
+                double3 xformOp:translate = (0, 0, 0.173)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+            }
+
+            def Sphere "button_tip" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                color3f[] primvars:displayColor = [(0.08, 0.12, 0.14)]
+                double radius = 0.008
+                double3 xformOp:translate = (0, 0, 0.225)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+            }
+        }
+    }
+
+    def PhysicsFixedJoint "nero_mount_joint"
+    {
+        rel physics:body0 = </Robot/riser_link>
+        rel physics:body1 = </Robot/nero/nero_base_link>
+        point3f physics:localPos0 = (0, 0, 0.55)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (0, 0, 0, 1)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+    }
+}
+

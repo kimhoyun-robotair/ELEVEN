@@ -1,9 +1,0 @@
-source;share/amr_tools/hook/pythonpath.ps1
-source;share/amr_tools/hook/pythonpath.dsv
-source;share/amr_tools/hook/pythonpath.sh
-source;share/amr_tools/hook/ament_prefix_path.ps1
-source;share/amr_tools/hook/ament_prefix_path.dsv
-source;share/amr_tools/hook/ament_prefix_path.sh
-source;../../build/amr_tools/share/amr_tools/hook/pythonpath_develop.ps1
-source;../../build/amr_tools/share/amr_tools/hook/pythonpath_develop.dsv
-source;../../build/amr_tools/share/amr_tools/hook/pythonpath_develop.sh

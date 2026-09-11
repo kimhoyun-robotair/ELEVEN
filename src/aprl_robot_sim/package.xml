@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>aprl_robot_sim</name>
+  <version>1.1.0</version>
+  <description>AMR multi-floor simulation with FLASH lidar and IMU</description>
+  <maintainer email="aprl@example.invalid">APRL</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_python</buildtool_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>rosgraph_msgs</exec_depend>
+  <exec_depend>tf2_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>nero_description</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>

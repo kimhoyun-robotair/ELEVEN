@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+isaac_root="${ISAAC_SIM_PATH:-${HOME}/isaacsim}"
+[[ -x "$isaac_root/python.sh" ]] || { echo "Missing Isaac Sim: $isaac_root" >&2; exit 2; }
+[[ "$(cat "$isaac_root/VERSION")" == 5.1.0* ]] || { echo "Isaac Sim 5.1.0 required" >&2; exit 2; }
+# Isaac embeds Python 3.11; native Jazzy uses Python 3.12.
+unset PYTHONPATH LD_LIBRARY_PATH AMENT_PREFIX_PATH CMAKE_PREFIX_PATH COLCON_PREFIX_PATH
+unset PYTHONHOME VIRTUAL_ENV CONDA_PREFIX
+export PYTHONDONTWRITEBYTECODE=1
+export ROS_DISTRO=jazzy RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-73}"
+export LD_LIBRARY_PATH="$isaac_root/exts/isaacsim.ros2.bridge/jazzy/lib"
+export XDG_CACHE_HOME="$project_root/.runtime/cache"
+export XDG_CONFIG_HOME="$project_root/.runtime/config"
+export XDG_DATA_HOME="$project_root/.runtime/data"
+export ROS_LOG_DIR="$project_root/.runtime/ros_log"
+export TMPDIR="$project_root/.runtime/tmp"
+mkdir -p "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$ROS_LOG_DIR" "$TMPDIR"
+cd "$project_root"
+export CARB_APP_PATH="$isaac_root/kit" ISAAC_PATH="$isaac_root" EXP_PATH="$isaac_root/apps"
+export PYTHONPATH=""
+source "$isaac_root/setup_python_env.sh"
+export RESOURCE_NAME=IsaacSim LD_PRELOAD="$isaac_root/kit/libcarb.so"
+if [[ -f /.dockerenv && -x "$isaac_root/vulkan_check.sh" ]]; then
+    "$isaac_root/vulkan_check.sh"
+fi
+# Direct exec lets Docker and terminal signals reach the simulator's cleanup.
+exec "$isaac_root/kit/python/bin/python3" "${APRL_ISAAC_SCRIPT:-$project_root/isaac_runtime/simulation.py}" "$@"

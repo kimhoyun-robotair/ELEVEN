@@ -1,0 +1,42 @@
+{
+  "world": "house",
+  "floorHeights": [
+    0,
+    3.4,
+    6.8
+  ],
+  "footprint": [
+    24,
+    20
+  ],
+  "elevators": [
+    {
+      "id": "E1",
+      "type": "opaque",
+      "position": [
+        -4,
+        7.4,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ]
+    },
+    {
+      "id": "E2",
+      "type": "glass",
+      "position": [
+        4,
+        7.4,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "world": "office",
+  "floorHeights": [
+    0,
+    3.6,
+    7.2,
+    10.8
+  ],
+  "footprint": [
+    30,
+    24
+  ],
+  "elevators": [
+    {
+      "id": "E1",
+      "type": "opaque",
+      "position": [
+        -10.5,
+        8.5,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ]
+    },
+    {
+      "id": "E2",
+      "type": "glass",
+      "position": [
+        -3.5,
+        8.5,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ]
+    },
+    {
+      "id": "E3",
+      "type": "opaque",
+      "position": [
+        3.5,
+        8.5,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ]
+    },
+    {
+      "id": "E4",
+      "type": "glass",
+      "position": [
+        10.5,
+        8.5,
+        0
+      ],
+      "cabinSize": [
+        2.4,
+        2.4,
+        2.7
+      ]
+    }
+  ]
+}

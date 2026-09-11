@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$project_root"
+export HOST_UID="$(id -u)" HOST_GID="$(id -g)"
+mkdir -p .runtime/lio/{ros,PCD/Temp,temp} .runtime/{kit-cache,gl-cache,cuda-cache}
+if [[ -n "${DISPLAY:-}" ]] && command -v xauth >/dev/null; then
+    touch .runtime/docker.xauth
+    chmod 600 .runtime/docker.xauth
+    xauth nlist "$DISPLAY" | sed -e 's/^..../ffff/' | xauth -f .runtime/docker.xauth nmerge -
+fi
+exec docker compose "$@"

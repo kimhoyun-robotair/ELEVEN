@@ -1,4 +1,0 @@
-[console_scripts]
-monitor = amr_tools.monitor:main
-smoke = amr_tools.smoke:main
-teleop = amr_tools.teleop:main

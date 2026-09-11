@@ -1,0 +1,73 @@
+#usda 1.0
+(
+    defaultPrim = "Robot"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Robot" (
+    prepend references = @amr_body.usda@
+)
+{
+    over "base_link"
+    {
+        def Xform "flash_lidar_link"
+        {
+            float xformOp:rotateY = -13
+            double3 xformOp:translate = (0.4, 0, 0.022)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateY"]
+
+            def Cube "Housing"
+            {
+                color3f[] primvars:displayColor = [(0.045, 0.052, 0.065)]
+                double size = 1
+                float3 xformOp:scale = (0.034, 0.128, 0.032)
+                double3 xformOp:translate = (-0.018, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Cube "Window"
+            {
+                color3f[] primvars:displayColor = [(0.015, 0.028, 0.045)]
+                double size = 1
+                float3 xformOp:scale = (0.001, 0.12, 0.028)
+                double3 xformOp:translate = (-0.001, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+        }
+
+        over "front_camera_link"
+        {
+            double3 xformOp:translate = (0.4, 0, -0.045)
+
+            over "Housing"
+            {
+                float3 xformOp:scale = (0.026, 0.06, 0.017)
+            }
+
+            over "Face"
+            {
+                float3 xformOp:scale = (0.001, 0.058, 0.015)
+            }
+
+            over "Lens_0"
+            {
+                double radius = 0.0045
+                double3 xformOp:translate = (-0.001, -0.02185, 0)
+            }
+
+            over "Lens_1"
+            {
+                double radius = 0.003
+                double3 xformOp:translate = (-0.001, 0, 0)
+            }
+
+            over "Lens_2"
+            {
+                double radius = 0.0045
+                double3 xformOp:translate = (-0.001, 0.02185, 0)
+            }
+        }
+    }
+}
+

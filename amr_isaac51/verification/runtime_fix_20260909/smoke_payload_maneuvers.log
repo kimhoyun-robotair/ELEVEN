@@ -1,7 +1,0 @@
-Waiting for all streams, valid payloads, advancing stamps and complete TF...
-DRIVE enabled: ensure the supplied test world is running with a clear forward path.
-{
-  "passed": true,
-  "report": "verification/runtime_fix_20260909/smoke_payload_maneuvers.json",
-  "failures": []
-}

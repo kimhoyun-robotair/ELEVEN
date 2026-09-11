@@ -1,0 +1,69 @@
+services:
+  sim:
+    image: aprl-robot-sim:5.1.0-jazzy
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    devices: ["nvidia.com/gpu=all"]
+    network_mode: host
+    ipc: host
+    init: true
+    stop_grace_period: 30s
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    environment:
+      DISPLAY: ${DISPLAY:-}
+      XAUTHORITY: /workspace/.runtime/docker.xauth
+      ACCEPT_EULA: ${ACCEPT_EULA:-N}
+      PRIVACY_CONSENT: ${PRIVACY_CONSENT:-N}
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-73}
+    volumes:
+      - ./.runtime:/workspace/.runtime
+      - ./.runtime/kit-cache:/isaac-sim/kit/cache
+      - ./.runtime/gl-cache:/home/ubuntu/.cache/nvidia/GLCache
+      - ./.runtime/cuda-cache:/home/ubuntu/.nv/ComputeCache
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+    command: ["./scripts/sim", "--scene", "${SCENE:-office}", "--robot", "${ROBOT:-amr}"]
+  ros:
+    image: aprl-robot-sim:5.1.0-jazzy
+    profiles: [tools]
+    network_mode: host
+    ipc: host
+    init: true
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-73}
+      DISPLAY: ${DISPLAY:-}
+      XAUTHORITY: /workspace/.runtime/docker.xauth
+    volumes:
+      - ./.runtime:/workspace/.runtime
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+    stdin_open: true
+    tty: true
+    command: ["./scripts/ros", "teleop"]
+  lio:
+    image: elevator-lio:jazzy-sim
+    profiles: [lio]
+    build:
+      context: ${ELEVATOR_LIO_PATH:-../Elevator-LIO}
+      dockerfile: Dockerfile
+      args:
+        ROS_DISTRO: jazzy
+        UBUNTU_CODENAME: noble
+        BUILD_JOBS: ${BUILD_JOBS:-4}
+    network_mode: host
+    ipc: host
+    init: true
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-73}
+      RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+      USE_LIVOX_DRIVER: "false"
+      USE_ORBBEC_CAMERA: "false"
+      USE_GX5_DRIVER: "false"
+      ROS_HOME: /tmp/lio-ros
+    volumes:
+      - ${ELEVATOR_LIO_PATH:-../Elevator-LIO}/yaml:/ros2_ws/install/share/lio/yaml:ro
+      - ./.runtime/lio/ros:/tmp/lio-ros
+      - ./.runtime/lio/PCD:/ros2_ws/src/elevator_lio/PCD
+      - ./.runtime/lio/temp:/ros2_ws/src/elevator_lio/temp
+    command: ["ros2", "run", "lio", "lio", "--ros-args", "-p", "config_path:=isaac_sim.yaml", "-p", "use_sim_time:=true"]

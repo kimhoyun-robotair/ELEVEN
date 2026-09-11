@@ -1,1 +1,0 @@
-"""Reproducible USD model construction."""

@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "model_name": "Photo-reference AMR 800x580",
+  "dimensions": {
+    "length": 0.8,
+    "width": 0.58,
+    "height": 0.245
+  },
+  "mass_kg": 100.0,
+  "max_payload_kg": 250.0,
+  "base_link_z_m": 0.15,
+  "base_mass_kg": 82.0,
+  "base_inertia_box_m": [
+    0.76,
+    0.54,
+    0.15
+  ],
+  "drive": {
+    "radius_m": 0.1,
+    "width_m": 0.045,
+    "track_m": 0.48,
+    "wheel_mass_kg": 5.0,
+    "max_speed_mps": 2.0,
+    "max_accel_mps2": 0.6,
+    "max_yaw_rate_rps": 1.5,
+    "max_yaw_accel_rps2": 1.5,
+    "torque_limit_nm": 80.0,
+    "velocity_damping": 800.0,
+    "command_timeout_s": 0.5
+  },
+  "caster": {
+    "pivot_x_m": 0.3,
+    "pivot_y_m": 0.22,
+    "pivot_z_m": 0.1,
+    "radius_m": 0.04,
+    "width_m": 0.024,
+    "trail_m": 0.02,
+    "swivel_mass_kg": 0.5,
+    "wheel_mass_kg": 1.5
+  },
+  "simulation": {
+    "physics_hz": 120,
+    "render_hz": 30
+  },
+  "camera": {
+    "width": 640,
+    "height": 360,
+    "hz": 15,
+    "hfov_deg": 87.0,
+    "min_depth_m": 0.4,
+    "max_depth_m": 6.0,
+    "front_pose_m_deg": [
+      0.4,
+      0,
+      0.105,
+      0
+    ],
+    "rear_pose_m_deg": [
+      -0.4,
+      0.0,
+      0.172,
+      180.0
+    ],
+    "pointcloud_stride": 2
+  },
+  "lidar": {
+    "samples": 541,
+    "hz": 10,
+    "fov_deg": 270.0,
+    "range_min_m": 0.05,
+    "range_max_m": 20.0,
+    "front_right_pose_m_deg": [
+      0.377,
+      -0.267,
+      0.192,
+      -45.0
+    ],
+    "rear_left_pose_m_deg": [
+      -0.377,
+      0.267,
+      0.192,
+      135.0
+    ]
+  },
+  "contact": {
+    "drive_friction": 1.0,
+    "caster_friction": 0.8,
+    "body_friction": 0.5
+  },
+  "payload": {
+    "size_m": [
+      0.5,
+      0.38,
+      0.2
+    ]
+  },
+  "notes": "Original AMR body geometry and mechanics retained. FLASH housing and calibration are simulation estimates. See README.md.",
+  "flash_lidar": {
+    "width": 192,
+    "height": 56,
+    "hz": 10,
+    "hfov_deg": 120.0,
+    "vfov_deg": 35.0,
+    "range_min_m": 0.3,
+    "range_max_m": 80.0,
+    "position_m": [
+      0.4,
+      0,
+      0.022
+    ],
+    "pitch_up_deg": 13
+  },
+  "imu": {
+    "hz": 120
+  },
+  "manipulator": {
+    "mount_height_m": 0.795,
+    "riser_height_m": 0.55,
+    "riser_mass_kg": 8.10008,
+    "home_rad": [
+      0,
+      -1.2,
+      0,
+      2.0,
+      0,
+      0,
+      0
+    ],
+    "joint_speed_rps": 0.65,
+    "wrist_camera": {
+      "width": 640,
+      "height": 400,
+      "hz": 15,
+      "hfov_deg": 94,
+      "min_depth_m": 0.04,
+      "max_depth_m": 1.0,
+      "pointcloud_stride": 2,
+      "dimensions_m": [
+        0.042,
+        0.042,
+        0.023
+      ],
+      "mass_kg": 0.068
+    }
+  }
+}

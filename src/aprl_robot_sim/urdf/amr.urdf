@@ -1,0 +1,1081 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="amr">
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0. 0. 0.15" rpy="0. 0. 0." />
+    <parent link="base_footprint" />
+    <child link="base_link" />
+  </joint>
+  <joint name="caster_fl_roll_joint" type="continuous">
+    <origin xyz="-0.02 0. -0.06" rpy="0. 0. 0." />
+    <parent link="caster_fl_swivel" />
+    <child link="caster_fl_wheel" />
+    <axis xyz="0. 1. 0." />
+  </joint>
+  <joint name="caster_fl_swivel_joint" type="continuous">
+    <origin xyz="0.3 0.22 -0.05" rpy="0. 0. 0." />
+    <parent link="base_link" />
+    <child link="caster_fl_swivel" />
+    <axis xyz="0. 0. 1." />
+  </joint>
+  <joint name="caster_fr_roll_joint" type="continuous">
+    <origin xyz="-0.02 -0. -0.06" rpy="0. 0. 0." />
+    <parent link="caster_fr_swivel" />
+    <child link="caster_fr_wheel" />
+    <axis xyz="0. 1. 0." />
+  </joint>
+  <joint name="caster_fr_swivel_joint" type="continuous">
+    <origin xyz="0.3 -0.22 -0.05" rpy="0. 0. 0." />
+    <parent link="base_link" />
+    <child link="caster_fr_swivel" />
+    <axis xyz="0. 0. 1." />
+  </joint>
+  <joint name="caster_rl_roll_joint" type="continuous">
+    <origin xyz="-0.02 0. -0.06" rpy="0. 0. 0." />
+    <parent link="caster_rl_swivel" />
+    <child link="caster_rl_wheel" />
+    <axis xyz="0. 1. 0." />
+  </joint>
+  <joint name="caster_rl_swivel_joint" type="continuous">
+    <origin xyz="-0.3 0.22 -0.05" rpy="0. 0. 0." />
+    <parent link="base_link" />
+    <child link="caster_rl_swivel" />
+    <axis xyz="0. 0. 1." />
+  </joint>
+  <joint name="caster_rr_roll_joint" type="continuous">
+    <origin xyz="-0.02 -0. -0.06" rpy="0. 0. 0." />
+    <parent link="caster_rr_swivel" />
+    <child link="caster_rr_wheel" />
+    <axis xyz="0. 1. 0." />
+  </joint>
+  <joint name="caster_rr_swivel_joint" type="continuous">
+    <origin xyz="-0.3 -0.22 -0.05" rpy="0. 0. 0." />
+    <parent link="base_link" />
+    <child link="caster_rr_swivel" />
+    <axis xyz="0. 0. 1." />
+  </joint>
+  <joint name="flash_lidar_link_joint" type="fixed">
+    <origin xyz="0.4 0. 0.022" rpy="0. -0.2268928 0. " />
+    <parent link="base_link" />
+    <child link="flash_lidar_link" />
+  </joint>
+  <joint name="front_camera_link_joint" type="fixed">
+    <origin xyz="0.4 0. -0.045" rpy="0. 0. 0." />
+    <parent link="base_link" />
+    <child link="front_camera_link" />
+  </joint>
+  <joint name="front_camera_optical_frame_joint" type="fixed">
+    <origin xyz="0. 0. 0." rpy="-1.5707964 0. -1.5707964" />
+    <parent link="front_camera_link" />
+    <child link="front_camera_optical_frame" />
+  </joint>
+  <joint name="front_right_lidar_link_joint" type="fixed">
+    <origin xyz="0.377 -0.267 0.042" rpy="0. 0. -0.7853982" />
+    <parent link="base_link" />
+    <child link="front_right_lidar_link" />
+  </joint>
+  <joint name="imu_link_joint" type="fixed">
+    <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+    <parent link="base_link" />
+    <child link="imu_link" />
+  </joint>
+  <joint name="left_drive_joint" type="continuous">
+    <origin xyz="0. 0.24 -0.05" rpy="0. 0. 0." />
+    <parent link="base_link" />
+    <child link="left_drive" />
+    <axis xyz="0. 1. 0." />
+  </joint>
+  <joint name="rear_camera_link_joint" type="fixed">
+    <origin xyz="-0.4 0. 0.022" rpy="0. 0. 3.1415927" />
+    <parent link="base_link" />
+    <child link="rear_camera_link" />
+  </joint>
+  <joint name="rear_camera_optical_frame_joint" type="fixed">
+    <origin xyz="0. 0. 0." rpy="-1.5707964 0. -1.5707964" />
+    <parent link="rear_camera_link" />
+    <child link="rear_camera_optical_frame" />
+  </joint>
+  <joint name="rear_left_lidar_link_joint" type="fixed">
+    <origin xyz="-0.377 0.267 0.042" rpy="0. 0. 2.3561945" />
+    <parent link="base_link" />
+    <child link="rear_left_lidar_link" />
+  </joint>
+  <joint name="right_drive_joint" type="continuous">
+    <origin xyz="0. -0.24 -0.05" rpy="0. 0. 0." />
+    <parent link="base_link" />
+    <child link="right_drive" />
+    <axis xyz="0. 1. 0." />
+  </joint>
+  <link name="base_footprint" />
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="82." />
+      <inertia ixx="2.1463499" ixy="0." ixz="0." iyy="4.1006832" iyz="0." izz="5.9395332" />
+    </inertial>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/Body.obj" scale="1. 1. 1." />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/WaistShadow.obj" scale="1. 1. 1." />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/TopDeck.obj" scale="1. 1. 1." />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0.283 -0.014" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/left_panel.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0.285 -0.014" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/left_panel_inset.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.27 0.287 -0.06 " rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/left_vent_n0_27_0_09.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.27 0.287 -0.034" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/left_vent_n0_27_0_116.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.27 0.287 -0.06 " rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/left_vent_0_27_0_09.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.27 0.287 -0.034" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/left_vent_0_27_0_116.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.16 0.287 -0.013" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/ServicePanel.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.12 0.287 -0.038" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/ServicePort_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.187 0.287 -0.038" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/ServicePort_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.12 0.287 0.01 " rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/ServicePort_2.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.187 0.287 0.01 " rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/ServicePort_3.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. -0.283 -0.014" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/right_panel.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. -0.285 -0.014" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/right_panel_inset.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.27 -0.287 -0.06 " rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/right_vent_n0_27_0_09.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.27 -0.287 -0.034" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/right_vent_n0_27_0_116.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.27 -0.287 -0.06 " rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/right_vent_0_27_0_09.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.27 -0.287 -0.034" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/right_vent_0_27_0_116.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.13 -0.287 0.021" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/StatusBezel.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.13 -0.2895 0.021 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/StatusWindow.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.11 -0.287 0.014" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/Control_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.085 -0.287 0.014" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/Control_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.06 -0.287 0.014" rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/Control_2.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.1 -0.287 -0.027" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/BlueSwitch.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.394 0. -0.012" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_face.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.3955 0. 0.022 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_camera_recess.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.396 -0.196 -0.061" rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_vent_n0_196_0_089.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.396 -0.196 -0.037" rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_vent_n0_196_0_113.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.396 0.196 -0.061" rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_vent_0_196_0_089.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.396 0.196 -0.037" rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_vent_0_196_0_113.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.396 0. -0.045" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_LowerPort.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.397 0. -0.045" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_LowerPortInset.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.394 0. -0.012" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_face.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.3955 0. 0.022 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_camera_recess.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.396 -0.196 -0.061" rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_vent_n0_196_0_089.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.396 -0.196 -0.037" rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_vent_n0_196_0_113.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.396 0.196 -0.061" rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_vent_0_196_0_089.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.396 0.196 -0.037" rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_vent_0_196_0_113.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.396 0. -0.045" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_LowerPort.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.397 0. -0.045" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_LowerPortInset.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. -0.168 0.0944" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/TopRail_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. -0.168 0.09485" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/TopRailInset_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.2 -0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_0_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.2 -0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_0_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.1 -0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_1_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.1 -0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_1_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. -0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_2_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. -0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_2_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.1 -0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_3_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.1 -0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_3_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.2 -0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_4_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.2 -0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_0_4_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.24 -0.168 0.0947" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailBolt_0_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.24 -0.168 0.0947" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailBolt_0_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0.168 0.0944" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/TopRail_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0.168 0.09485" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/TopRailInset_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.2 0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_0_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.2 0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_0_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.1 0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_1_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.1 0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_1_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_2_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_2_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.1 0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_3_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.1 0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_3_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.2 0.168 0.0949" rpy="0. 0. -0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_4_n1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.2 0.168 0.0949" rpy="0. 0. 0.5061455" />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailRib_1_4_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.24 0.168 0.0947" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailBolt_1_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.24 0.168 0.0947" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/RailBolt_1_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.32 -0.22 0.094" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/DeckBolt_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.32 -0.22 0.094" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/DeckBolt_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.32 0.22 0.094" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/DeckBolt_2.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.32 0.22 0.094" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/DeckBolt_3.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.32 0. 0.094" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/DeckBolt_4.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.32 0. 0.094" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/DeckBolt_5.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.372 -0.26 -0.013" rpy="0.7853982 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_right_estop_Surround.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.3762426 -0.2642426 -0.013 " rpy="0.7853982 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_right_estop_RedButton.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.3804853 -0.2684853 -0.013 " rpy="0.7853982 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_right_estop_Center.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.372 0.26 -0.013" rpy="-2.3561945 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_left_estop_Surround.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.3762426 0.2642426 -0.013 " rpy="-2.3561945 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_left_estop_RedButton.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.3804853 0.2684853 -0.013 " rpy="-2.3561945 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_left_estop_Center.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/Chassis.obj" scale="1. 1. 1." />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0. 0. -0.0215" rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.76 0.3 0.153" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.384 0. -0.015" rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.02 0.48 0.14" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.384 0. -0.015" rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.02 0.48 0.14" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0. 0.276 0.0075" rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.71 0.012 0.095" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0. -0.276 0.0075" rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.71 0.012 0.095" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/Deck.obj" scale="1. 1. 1." />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_fl_swivel">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="0.5" />
+      <inertia ixx="0.0003168" ixy="0." ixz="0." iyy="0.0003542" iyz="0." izz="0.0002627" />
+    </inertial>
+    <visual>
+      <origin xyz="-0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fl_swivel_Bearing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.01 -0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fl_swivel_ForkR.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.01 0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fl_swivel_ForkL.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <cylinder radius="0.024" length="0.01" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 -0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.034 0.006 0.059" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.034 0.006 0.059" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_fl_wheel">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="1.5" />
+      <inertia ixx="0.000672" ixy="0." ixz="0." iyy="0.0012" iyz="0." izz="0.000672" />
+    </inertial>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fl_wheel_Tire.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fl_wheel_Hub.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <cylinder radius="0.04" length="0.024" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_fr_swivel">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="0.5" />
+      <inertia ixx="0.0003168" ixy="0." ixz="0." iyy="0.0003542" iyz="0." izz="0.0002627" />
+    </inertial>
+    <visual>
+      <origin xyz="-0. -0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fr_swivel_Bearing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.01 -0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fr_swivel_ForkR.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.01 0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fr_swivel_ForkL.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0. -0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <cylinder radius="0.024" length="0.01" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 -0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.034 0.006 0.059" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.034 0.006 0.059" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_fr_wheel">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="1.5" />
+      <inertia ixx="0.000672" ixy="0." ixz="0." iyy="0.0012" iyz="0." izz="0.000672" />
+    </inertial>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fr_wheel_Tire.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_fr_wheel_Hub.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <cylinder radius="0.04" length="0.024" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_rl_swivel">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="0.5" />
+      <inertia ixx="0.0003168" ixy="0." ixz="0." iyy="0.0003542" iyz="0." izz="0.0002627" />
+    </inertial>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rl_swivel_Bearing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.01 -0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rl_swivel_ForkR.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.01 0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rl_swivel_ForkL.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <cylinder radius="0.024" length="0.01" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 -0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.034 0.006 0.059" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.034 0.006 0.059" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_rl_wheel">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="1.5" />
+      <inertia ixx="0.000672" ixy="0." ixz="0." iyy="0.0012" iyz="0." izz="0.000672" />
+    </inertial>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rl_wheel_Tire.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rl_wheel_Hub.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <cylinder radius="0.04" length="0.024" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_rr_swivel">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="0.5" />
+      <inertia ixx="0.0003168" ixy="0." ixz="0." iyy="0.0003542" iyz="0." izz="0.0002627" />
+    </inertial>
+    <visual>
+      <origin xyz="0. -0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rr_swivel_Bearing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.01 -0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rr_swivel_ForkR.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.01 0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rr_swivel_ForkL.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. -0. 0." rpy="0. 0. 0." />
+      <geometry>
+        <cylinder radius="0.024" length="0.01" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 -0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.034 0.006 0.059" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 0.017 -0.03 " rpy="0. 0. 0." />
+      <geometry>
+        <box size="0.034 0.006 0.059" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_rr_wheel">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="1.5" />
+      <inertia ixx="0.000672" ixy="0." ixz="0." iyy="0.0012" iyz="0." izz="0.000672" />
+    </inertial>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rr_wheel_Tire.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/caster_rr_wheel_Hub.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <cylinder radius="0.04" length="0.024" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="flash_lidar_link">
+    <visual>
+      <origin xyz="-0.018 0. 0. " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/flash_lidar_link_Housing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.001 0. 0. " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/Window.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="front_camera_link">
+    <visual>
+      <origin xyz="-0.016 0. 0. " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_camera_link_Housing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.0025 0. 0. " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_camera_link_Face.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.001 -0.02185 0. " rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_camera_link_Lens_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.001 0. 0. " rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_camera_link_Lens_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.001 0.02185 0. " rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_camera_link_Lens_2.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="front_camera_optical_frame" />
+  <link name="front_right_lidar_link">
+    <visual>
+      <origin xyz="-0.02 -0. -0.004" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_right_lidar_link_Housing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.02 -0. 0.014" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/front_right_lidar_link_Cap.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="imu_link" />
+  <link name="left_drive">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="5." />
+      <inertia ixx="0.0133437" ixy="0." ixz="0." iyy="0.025" iyz="0." izz="0.0133437" />
+    </inertial>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/left_drive_Tire.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/left_drive_Hub.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <cylinder radius="0.1" length="0.045" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="rear_camera_link">
+    <visual>
+      <origin xyz="-0.016 0. 0. " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_camera_link_Housing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.0025 0. 0. " rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_camera_link_Face.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.001 -0.0475 0. " rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_camera_link_Lens_0.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.001 0. 0. " rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_camera_link_Lens_1.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.001 0.0475 0. " rpy="0. 1.5707964 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_camera_link_Lens_2.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="rear_camera_optical_frame" />
+  <link name="rear_left_lidar_link">
+    <visual>
+      <origin xyz="-0.02 -0. -0.004" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_left_lidar_link_Housing.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.02 -0. 0.014" rpy="0. 0. 0." />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/rear_left_lidar_link_Cap.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="right_drive">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0." />
+      <mass value="5." />
+      <inertia ixx="0.0133437" ixy="0." ixz="0." iyy="0.025" iyz="0." izz="0.0133437" />
+    </inertial>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/right_drive_Tire.obj" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <mesh filename="package://aprl_robot_sim/meshes/right_drive_Hub.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="1.5707964 0. 0. " />
+      <geometry>
+        <cylinder radius="0.1" length="0.045" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

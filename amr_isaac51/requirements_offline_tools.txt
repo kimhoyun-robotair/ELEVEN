@@ -1,6 +1,0 @@
-# OPTIONAL: system-Python offline model generation/preview only.
-# Never pip-install usd-core into Isaac Sim; its bundled pxr must be used there.
-# The delivered assets and reports were generated/parsed with usd-core 26.8.
-usd-core==26.8
-matplotlib>=3.8,<4
-numpy>=1.26,<3
