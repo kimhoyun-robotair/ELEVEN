@@ -1,0 +1,163 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Name: Tool Properties
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Background Color: 30; 33; 39
+    Fixed Frame: sim_world
+    Frame Rate: 30
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Ground grid
+      Enabled: true
+      Cell Size: 1
+      Plane Cell Count: 30
+      Color: 95; 95; 100
+      Alpha: 0.4
+    - Class: rviz_default_plugins/RobotModel
+      Name: Scout Twin
+      Enabled: true
+      Alpha: 1
+      Visual Enabled: true
+      Collision Enabled: false
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description
+        Reliability Policy: Reliable
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Depth: 1
+    - Class: rviz_default_plugins/TF
+      Name: TF frames
+      Enabled: false
+      Show Names: true
+      Show Axes: true
+      Show Arrows: false
+      Marker Scale: 0.15
+    - Class: rviz_default_plugins/Odometry
+      Name: Ground truth odometry
+      Enabled: false
+      Topic:
+        Value: /ground_truth/odom
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Keep: 30
+      Position Tolerance: 0.1
+      Angle Tolerance: 0.1
+      Shape: Arrow
+    - Class: rviz_default_plugins/PointCloud2
+      Name: MID-360 points
+      Enabled: true
+      Topic:
+        Value: /mid360/points
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Style: Points
+      Size (Pixels): 2
+      Color Transformer: AxisColor
+      Position Transformer: XYZ
+      Axis: Z
+      Use Fixed Frame: true
+      Decay Time: 0.25
+      Alpha: 0.9
+    - Class: rviz_default_plugins/Image
+      Name: Front color
+      Enabled: true
+      Topic:
+        Value: /camera_front/color/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Transport Hint: raw
+      Normalize Range: true
+      Median window: 5
+    - Class: rviz_default_plugins/Image
+      Name: Front depth
+      Enabled: true
+      Topic:
+        Value: /camera_front/depth/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Transport Hint: raw
+      Normalize Range: true
+      Median window: 5
+    - Class: rviz_default_plugins/Image
+      Name: Left color
+      Enabled: false
+      Topic:
+        Value: /camera_left/color/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Transport Hint: raw
+      Normalize Range: true
+      Median window: 5
+    - Class: rviz_default_plugins/Image
+      Name: Left depth
+      Enabled: false
+      Topic:
+        Value: /camera_left/depth/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Transport Hint: raw
+      Normalize Range: true
+      Median window: 5
+    - Class: rviz_default_plugins/Image
+      Name: Right color
+      Enabled: false
+      Topic:
+        Value: /camera_right/color/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Transport Hint: raw
+      Normalize Range: true
+      Median window: 5
+    - Class: rviz_default_plugins/Image
+      Name: Right depth
+      Enabled: false
+      Topic:
+        Value: /camera_right/depth/image_raw
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Transport Hint: raw
+      Normalize Range: true
+      Median window: 5
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/Measure
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Target Frame: base_link
+      Distance: 3.6
+      Pitch: 0.38
+      Yaw: 0.80
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0.6
+Window Geometry:
+  Width: 1440
+  Height: 900

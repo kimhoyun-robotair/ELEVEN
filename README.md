@@ -2,9 +2,9 @@
 
 **Ubuntu 24.04 · Isaac Sim 5.1.0 · ROS 2 Jazzy**
 
-Office/House 다층 환경에서 AMR 또는 NERO 팔과 gripper를 장착한
-locomanipulator를 선택합니다. 실제 PhysX 바퀴 구동과 엘리베이터 접촉으로 이동하며,
-ROS teleop, RGBD 영상·점군, FLASH/2D 라이다, IMU, odometry, 관절 상태와 TF를 제공합니다.
+Office/House 다층 환경에서 AMR, NERO 팔과 gripper를 장착한 locomanipulator,
+또는 Scout Mini 센서 리그를 선택합니다. 실제 PhysX 바퀴 구동과 엘리베이터 접촉으로
+이동하며, ROS teleop, RGBD, 로봇별 라이다·IMU, odometry, 관절 상태와 TF를 제공합니다.
 
 | AMR | AMR + NERO |
 |---|---|
@@ -20,11 +20,11 @@ ROS teleop, RGBD 영상·점군, FLASH/2D 라이다, IMU, odometry, 관절 상�
 ```sh
 cd ~/aprl_robot_sim
 ./scripts/sim --scene office --robot locomanipulator
-# 환경: office | house, 로봇: amr | locomanipulator
+# 환경: office | house, 로봇: amr | locomanipulator | scout
 # 화면 없이 실행: --headless
 ```
 
-`AMR_READY` 이후 별도 터미널에서:
+`AMR_READY` 또는 `SCOUT_READY` 이후 별도 터미널에서:
 
 ```sh
 ./scripts/ros teleop
@@ -78,12 +78,48 @@ stylus와 버튼의 **PhysX 접촉 보고**가 발생해야 호출합니다. 팔
 검사하고, 하차 후에도 6 m 이상 주행합니다. 보고서에는 접촉 위치·impulse와 실제
 궤적이 남습니다.
 
-`--robot amr`을 양쪽 명령에 사용하면 팔 없이 같은 층간 주행을 수행하고, 버튼은
+팔의 180° yaw 장착에 맞춰 버튼 조작 시 차체 전면은 패널 반대쪽을 향합니다.
+객실 패널에는 후진으로 접근해 팔로 버튼을 누르며, 전면 FLASH 라이다가 벽에 너무
+가까워져 점군을 잃는 것을 방지합니다. 버튼 조작 후에는 전진으로 패널에서 벗어납니다.
+
+`--robot amr` 또는 `--robot scout`를 양쪽 명령에 사용하면 팔 없이 같은 층간 주행을 수행하고, 버튼은
 ROS 엘리베이터 API로 요청합니다. 이는 제공된 두 환경의 waypoint 예제입니다.
 Nav2 전역 경로 계획이나 임의 장애물 회피 기능은 포함하지 않습니다.
 예제 중에는 teleop이나 다른 명령 발행자를 함께 실행하지 마세요.
 
 ## 로봇과 센서
+
+### Scout Mini
+
+`~/scout_mini_isaac510_ros2_jazzy/scout_twin`의 USD, URDF, OBJ/MTL 메시와
+`scout_twin_description` 패키지를 포함합니다. 원본 디렉터리 없이 실행할 수 있습니다.
+
+```sh
+./scripts/ros build
+./scripts/sim --scene office --robot scout
+# 별도 터미널에서 각각 실행:
+./scripts/ros teleop
+./scripts/ros rviz --robot scout
+./scripts/ros verify --robot scout --report .runtime/scout-streams.json
+# 경로 예제는 teleop을 종료하고 새 Scout 시뮬레이터에서 실행:
+./scripts/ros route --scene office --robot scout --report .runtime/scout-route.json
+```
+
+Scout는 반지름 80 mm, 좌우 간격 490 mm의 4륜 skid steering 모델입니다.
+전방·좌측·우측 Gemini 336L RGBD는 각각 640 × 400 / 15 Hz이며 RGB와 depth의
+화각·intrinsics를 별도로 유지합니다. MID-360은 RTX 기반 360° / −7°~52°,
+10 Hz, 0.1–40 m 점군과 내장 위치의 PhysX IMU 200 Hz를 제공합니다.
+센서 토픽은 `/camera_{front,left,right}/{color,depth}/{image_raw,camera_info}`,
+`/mid360/points`, `/mid360/imu`입니다. 설정은 [scout.json](config/scout.json)에 있습니다.
+
+공통 `/cmd_vel`, `/odom`(바퀴 encoder), `/ground_truth/odom`(실제 PhysX 위치),
+`/joint_states`, `/robot_description`, TF와 엘리베이터 API를 사용합니다.
+Scout의 RGB와 depth는 화각이 달라 등록된 색상 점군을 발행하지 않습니다.
+MID-360은 기하학적 스캔 근사이며 실제 Livox 비반복 패턴이나 장치 드라이버는 아닙니다.
+설명 패키지 단독 미리보기와 이식한 검사 도구는
+[Scout 패키지 README](src/scout_twin_description/README.md)를 참고하세요.
+
+### AMR / locomanipulator
 
 - 기본 차체: 800 × 580 × 245 mm, 차체·바퀴·캐스터의 기존 모델 유지.
 - NERO: 제공된 `nero_with_gripper_description.urdf`의 7축 팔과 gripper 메시를 사용.
@@ -129,6 +165,7 @@ ROS 패키지·노드·예제·RViz·URDF는 모두 `src/` 아래에 있습니�
 ```text
 src/aprl_robot_sim/     Jazzy 노드, 예제, RViz, 완성 로봇 URDF·mesh, ROS 문서
 src/nero_description/  제공된 NERO URDF·mesh와 ROS 패키지
+src/scout_twin_description/ Scout Mini URDF·mesh, description launch와 검사 도구
 isaac_runtime/         Isaac 실행, 물리·센서 bridge
 assets/                실행용 USD, 환경·텍스처
 config/                Isaac 센서·물리 설정
@@ -155,7 +192,7 @@ SCENE=office ROBOT=locomanipulator ./scripts/container up sim
 ./scripts/container run --rm ros ./scripts/ros verify --robot locomanipulator
 ```
 
-House는 `SCENE=house`, 기본 AMR은 `ROBOT=amr`입니다. Headless 실행:
+House는 `SCENE=house`, 기본 AMR은 `ROBOT=amr`, Scout는 `ROBOT=scout`입니다. Headless 실행:
 
 ```sh
 ./scripts/container run --rm sim ./scripts/sim --headless --scene house --robot amr
@@ -170,6 +207,8 @@ Elevator-LIO만 컨테이너로 실행하는 절차는 아래 섹션을 참고�
 
 이 저장소의 [compose.yaml](compose.yaml)에 정의된 **`lio` 서비스만** 실행합니다.
 호스트에서 실행 중인 Isaac Sim의 FLASH 점군과 IMU를 받아 LIO를 수행하는 구성입니다.
+이 LIO 설정은 AMR/locomanipulator용입니다. Scout는 MID-360 토픽·센서 유형·extrinsic에
+맞는 별도 LIO 설정이 필요하며, 아래 FLASH 설정을 그대로 사용하지 않습니다.
 LIO 컨테이너는 ROS 2 Jazzy를 포함하며 GUI 없이 동작합니다. 이 서비스만 실행할 때는
 Docker Engine과 Docker Compose가 필요하며, Isaac Sim Docker 이미지 빌드나 NVIDIA
 Container Toolkit, X11 설정은 필요하지 않습니다. 시뮬레이터 실행 환경은 별도로 준비합니다.
@@ -358,7 +397,7 @@ FLASH의 현재 위치는 `base_link` 기준 `(0.400, 0, 0.022)` m, 회전은 **
 ./scripts/sim --inspection --robot locomanipulator
 ```
 
-`--robot amr`로 기본 AMR을 확인할 수 있습니다.
+`--robot amr`로 기본 AMR, `--robot scout`로 Scout Mini를 확인할 수 있습니다.
 검증 기록·주행 녹화·Blender 원본·모델 재생성 도구·미사용 NERO 변형 모델은
 로컬 개발 자료로 보관하며 Git 및 Docker 배포에서 제외합니다.
 README의 회전 GIF와 MP4, 실행용 자산, 자산 출처 문서는 배포에 포함합니다.

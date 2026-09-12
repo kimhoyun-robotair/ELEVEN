@@ -9,6 +9,8 @@ its own Python 3.11 bridge. Default DDS domain: **73**, RMW: **Fast DDS**.
 ./scripts/ros arm_teleop       # locomanipulator only, in a separate terminal
 ./scripts/ros rviz
 ./scripts/ros verify --robot locomanipulator --report .runtime/streams.json
+./scripts/ros rviz --robot scout
+./scripts/ros verify --robot scout --report .runtime/scout-streams.json
 ```
 
 Run these commands from the repository root. Installed equivalents are
@@ -25,8 +27,8 @@ processes. `use_sim_time:=true` should be used by downstream ROS nodes.
 | `/arm/press_button` | `std_msgs/msg/String` | Contact-confirmed button operation; JSON below |
 | `/arm/state` | `std_msgs/msg/String` | Phase, error, request_id, measured tip position and physical contact events |
 | `/clock` | `rosgraph_msgs/msg/Clock` | Simulation time |
-| `/joint_states` | `sensor_msgs/msg/JointState` | Actual 10 AMR or 19 combined DOFs |
-| `/robot_description` | `std_msgs/msg/String` | Complete URDF for the selected `amr` or `locomanipulator`, including sensors |
+| `/joint_states` | `sensor_msgs/msg/JointState` | Actual 10 AMR, 19 combined, or 4 Scout DOFs |
+| `/robot_description` | `std_msgs/msg/String` | Complete URDF for the selected `amr`, `locomanipulator`, or `scout`, including sensors |
 | `/odom` | `nav_msgs/msg/Odometry` | Wheel encoder integration, wheel_odom → wheel_base |
 | `/ground_truth/odom` | `nav_msgs/msg/Odometry` | Actual PhysX pose, sim_world → base_link |
 | `/mlx/pointcloud` | `sensor_msgs/msg/PointCloud2` | RTX FLASH; flash_lidar_link; x/y/z/intensity float32, t uint32 ns (0) |
@@ -61,6 +63,29 @@ RViz's Robot model reads `/robot_description` and the existing simulator TF; ano
 The AMR description has 20 links; the combined description has 35. Both include
 the 13° upward FLASH mounting and ROS optical frames. Generated files are in `urdf/`;
 the NERO visual/collision meshes reuse the supplied description package.
+
+Scout reuses `scout_twin_description/urdf/scout_twin.urdf` and its
+`package://scout_twin_description/meshes/` resources. Its URDF name remains
+`scout_mini_photo_twin`; the CLI selection and elevator state use `scout`.
+The simulator owns its retained description and full TF, so a second state publisher
+is unnecessary. The imported launch defaults to viewing the simulator; standalone
+preview requires `publish_state:=true preview_joints:=true use_sim_time:=false fixed_frame:=base_link`.
+
+Scout replaces the AMR's FLASH, 2D scans and camera topics with:
+
+| Topic | ROS message | Meaning / frame |
+|---|---|---|
+| `/mid360/points` | `sensor_msgs/msg/PointCloud2` | RTX rotary approximation; mid360_link; x/y/z/intensity float32; acquisition-end sim stamp |
+| `/mid360/imu` | `sensor_msgs/msg/Imu` | Native 200 Hz PhysX IMU; imu_link, mounted within mid360_link |
+| `/camera_{front,left,right}/{color,depth}/image_raw` | `sensor_msgs/msg/Image` | 640×400 / 15 Hz rgb8 or 32FC1, camera_{side}_{stream}_optical_frame |
+| `/camera_{front,left,right}/{color,depth}/camera_info` | `sensor_msgs/msg/CameraInfo` | Separate RGB 94° and depth 90° horizontal-FOV intrinsics |
+
+The common `/cmd_vel`, clock, odometry, TF, description and elevator topics above
+also apply to Scout. Encoder odometry averages the two wheels on each side; skid
+slip can differ from `/ground_truth/odom`. No aligned color/depth points are
+published for Scout's different camera intrinsics. `verify --robot scout` checks
+the MID-360 layout, four joints, complete TF and each image/intrinsics pair.
+All scripts respect `ROS_DOMAIN_ID` (default 73).
 
 ```sh
 ./scripts/ros topic echo /robot_description --qos-durability transient_local --once

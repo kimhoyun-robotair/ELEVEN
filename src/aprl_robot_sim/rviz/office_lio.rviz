@@ -1,0 +1,87 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Floor grid (1 m)
+      Enabled: true
+      Cell Size: 1
+      Plane Cell Count: 40
+      Color: 64; 79; 99
+      Alpha: 0.35
+    - Class: rviz_default_plugins/PointCloud2
+      Name: Elevator-LIO Global Map
+      Enabled: true
+      Topic:
+        Value: /LIO/global_map
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        Depth: 1
+      Queue Size: 2
+      Style: Points
+      Size (Pixels): 2
+      Color Transformer: AxisColor
+      Axis: Z
+      Autocompute Value Bounds: false
+      Min Value: -0.2
+      Max Value: 6.5
+      Use Fixed Frame: true
+    - Class: rviz_default_plugins/PointCloud2
+      Name: Current LiDAR scan
+      Enabled: true
+      Topic:
+        Value: /LIO/clouds_lidar
+        Reliability Policy: Reliable
+        Depth: 1
+      Queue Size: 2
+      Style: Points
+      Size (Pixels): 2
+      Color Transformer: FlatColor
+      Color: 235; 242; 250
+      Alpha: 0.7
+    - Class: rviz_default_plugins/Path
+      Name: Estimated trajectory
+      Enabled: true
+      Topic:
+        Value: /lio_node/path_topic_name
+        Reliability Policy: Reliable
+        Depth: 1
+      Line Style: Billboards
+      Line Width: 0.055
+      Color: 255; 207; 87
+    - Class: rviz_default_plugins/Axes
+      Name: Estimated IMU pose
+      Enabled: true
+      Reference Frame: IMU
+      Length: 0.8
+      Radius: 0.06
+  Enabled: true
+  Global Options:
+    Background Color: 14; 22; 35
+    Fixed Frame: world
+    Frame Rate: 20
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 50
+      Focal Point:
+        X: 10
+        Y: -4
+        Z: 1.8
+      Name: Global map - two floors
+      Pitch: 0.75
+      Yaw: 4.6
+Window Geometry:
+  Height: 1240
+  Width: 960
+  X: 1600
+  Y: 0
+  Hide Left Dock: true
+  Hide Right Dock: true

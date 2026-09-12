@@ -7,8 +7,9 @@ from pxr import Gf, Usd, UsdGeom
 
 
 class RobotViews:
-    def __init__(self, stage, tall=False):
+    def __init__(self, stage, tall=False, eye_path='/World/Robot/base_link/front_camera_link/camera'):
         self.tall = tall
+        self.eye_path = eye_path
         self.stage, self.mode = stage, 'follow'
         self.path = '/World/RobotView'
         camera = UsdGeom.Camera.Define(stage, self.path)
@@ -16,7 +17,7 @@ class RobotViews:
         camera.CreateClippingRangeAttr(Gf.Vec2f(0.03, 300))
         self.xform = UsdGeom.Xformable(camera)
         self.xform.MakeMatrixXform()
-        self.window = ui.Window('AMR view', width=360, height=170, position_x=1030, position_y=45)
+        self.window = ui.Window('Robot view', width=360, height=170, position_x=1030, position_y=45)
         with self.window.frame:
             with ui.VStack(spacing=6):
                 with ui.HStack(spacing=4):
@@ -41,7 +42,7 @@ class RobotViews:
                 self.xform.MakeMatrixXform().Set(UsdGeom.Xformable(current).ComputeLocalToWorldTransform(Usd.TimeCode.Default()))
         self.mode = mode
         if mode == 'robot':
-            viewport.camera_path = '/World/Robot/base_link/front_camera_link/camera'
+            viewport.camera_path = self.eye_path
         else:
             viewport.camera_path = self.path
             self.update(0)

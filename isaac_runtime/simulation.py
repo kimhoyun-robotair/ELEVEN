@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""AMR multi-floor simulation and ROS 2 Jazzy data bridge for Isaac Sim 5.1.0.
+"""Multi-robot, multi-floor simulation and ROS 2 Jazzy bridge for Isaac Sim 5.1.0.
 
 Run with scripts/sim (Isaac's Python 3.11), never system Python.
 All sensor values come from RTX rendering or the live PhysX collision scene.
@@ -19,18 +19,19 @@ import traceback
 
 PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT))
-from isaac_runtime.control import DriveLimiter
+from isaac_runtime.control import AMR_DRIVE, SCOUT_DRIVE, DriveLimiter
+from isaac_runtime.scout import CameraSpec, camera_specs as scout_camera_specs, configure_camera, runtime_config
 
 
 def arguments():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--headless", action="store_true", help="Still renders camera products on the GPU")
     p.add_argument("--duration", type=float, default=0, help="Simulation seconds after sensor readiness; 0 runs until closed")
-    p.add_argument("--config", type=Path, default=PROJECT / "config/robot.json")
+    p.add_argument("--config", type=Path, help="Defaults to config/scout.json for Scout, config/robot.json otherwise")
     p.add_argument("--scene", choices=("office", "house"), default="office")
-    p.add_argument("--robot", choices=("amr", "locomanipulator"), default="amr")
+    p.add_argument("--robot", choices=("amr", "locomanipulator", "scout"), default="amr")
     p.add_argument("--spawn", nargs=4, type=float, metavar=("X", "Y", "Z", "YAW"), help="Initial base-footprint pose in meters and yaw degrees")
-    p.add_argument("--inspection", action="store_true", help="Isolated AMR turntable in Isaac GUI")
+    p.add_argument("--inspection", action="store_true", help="Isolated robot turntable in Isaac GUI")
     p.add_argument("--capture-orbit", type=Path, help="Write 360-degree PNG frames from the actual USD")
     p.add_argument("--report", type=Path, default=PROJECT / ".runtime/logs/runtime_report.json")
     p.add_argument("--startup-timeout", type=float, default=180, help="Sensor warm-up limit in wall seconds; includes cold RTX compilation")
@@ -40,9 +41,14 @@ def arguments():
     a, kit_args = p.parse_known_args()
     sys.argv = [sys.argv[0], *kit_args]
     a.world = PROJECT / "assets/scenes" / f"{a.scene}.usda"
+    a.config = a.config or PROJECT / 'config' / ('scout.json' if a.robot == 'scout' else 'robot.json')
     if not a.config.is_file() or not a.world.is_file():
         p.error("Config or world USD missing. Re-extract the complete package or build the assets.")
     cfg = json.loads(a.config.read_text())
+    if a.robot == 'scout':
+        cfg = runtime_config(cfg)
+        if a.caster_yaw_deg is not None:
+            p.error('Scout has four drive wheels and no passive casters')
     if not math.isfinite(a.duration) or a.duration < 0 or a.startup_timeout <= 0:
         p.error("duration must be nonnegative and startup-timeout positive")
     if a.caster_yaw_deg is not None and not math.isfinite(a.caster_yaw_deg):
@@ -133,14 +139,25 @@ def run(a, cfg, report):
         light = UsdLux.DomeLight.Define(stage, '/World/AMRAmbient')
         light.CreateIntensityAttr(1200.0 if a.inspection else 350.0)
         root = "/World/Robot"
+        scout = a.robot == 'scout'
+        drive_layout = SCOUT_DRIVE if scout else AMR_DRIVE
+        scan_sides = () if scout else ('front_right', 'rear_left')
         robot_prim = UsdGeom.Xform.Define(stage, root)
-        robot_prim.GetPrim().GetReferences().AddReference(str(PROJECT / 'assets/robot' / f'{a.robot}.usda'))
-        robot_prim.GetPrim().GetAttribute('xformOp:translate').Set(Gf.Vec3d(*route['spawn'][:3]))
+        asset = PROJECT / 'assets/robot' / (f'{a.robot}.usd' if scout else f'{a.robot}.usda')
+        robot_prim.GetPrim().GetReferences().AddReference(str(asset))
+        spawn = list(route['spawn'][:3])
+        if scout:
+            spawn[2] += cfg['base_link_z_m']
+        UsdGeom.XformCommonAPI(robot_prim).SetTranslate(Gf.Vec3d(*spawn))
         robot_prim.AddRotateZOp().Set(float(route['spawn'][3]))
         base_path = f"{root}/base_link"
-        required = [root, base_path, f"{root}/left_drive", f"{root}/right_drive"]
-        required += [f"{base_path}/{s}_camera_link/camera" for s in ("front", "rear")]
-        required += [f"{base_path}/{s}_lidar_link" for s in ("front_right", "rear_left")]
+        required = [root, base_path] + [f'{root}/{name}' for name in drive_layout.wheels]
+        if scout:
+            required += [f"{base_path}/{c['name']}_link" for c in cfg['cameras']]
+            required += [base_path + '/mid360_link/imu_link']
+        else:
+            required += [f"{base_path}/{s}_camera_link/camera" for s in ("front", "rear")]
+            required += [f"{base_path}/{s}_lidar_link" for s in scan_sides]
         absent = [p for p in required if not stage.GetPrimAtPath(p).IsValid()]
         if absent:
             raise RuntimeError(f"World has missing required robot prims: {absent}")
@@ -148,9 +165,10 @@ def run(a, cfg, report):
             raise RuntimeError("base_link must be a dynamic rigid body")
         phz, rhz = int(cfg["simulation"]["physics_hz"]), int(cfg["simulation"]["render_hz"])
         camera_cfg, lidar_cfg = cfg["camera"], cfg["lidar"]
+        lidar_hz = int(lidar_cfg['rate_hz'] if scout else lidar_cfg['hz'])
         if phz <= 0 or rhz <= 0 or phz % rhz or rhz % int(camera_cfg["hz"]):
             raise ValueError("physics_hz must be a multiple of render_hz; render_hz a multiple of camera.hz")
-        if phz % int(lidar_cfg["hz"]):
+        if phz % lidar_hz:
             raise ValueError("physics_hz must be a multiple of lidar.hz")
         dt = 1.0 / phz
         sim = SimulationContext(physics_dt=dt, rendering_dt=1.0 / rhz,
@@ -163,9 +181,10 @@ def run(a, cfg, report):
         carb.settings.get_settings().set_bool("/physics/updateToUsd", True)
         carb.settings.get_settings().set_bool("/physics/updateVelocitiesToUsd", True)
         sim.set_block_on_render(True)
-        robot = SingleArticulation(prim_path=base_path if a.robot == "locomanipulator" else root, name="photo_amr", reset_xform_properties=False)
+        robot = SingleArticulation(prim_path=root if a.robot == 'amr' else base_path, name=a.robot, reset_xform_properties=False)
         from isaacsim.sensors.physics import IMUSensor
-        imu = IMUSensor(base_path + '/imu_link', frequency=cfg['imu']['hz'], translation=np.zeros(3))
+        imu_path = base_path + ('/mid360_link/imu_link/imu_sensor' if scout else '/imu_link')
+        imu = IMUSensor(imu_path, frequency=cfg['imu']['hz'], translation=np.zeros(3))
         if a.robot == 'locomanipulator' and not a.inspection:
             from isaac_runtime.manipulator import prepare_buttons
             prepare_buttons(stage)
@@ -174,14 +193,16 @@ def run(a, cfg, report):
         if a.caster_yaw_deg is not None:
             caster_indices = np.array([robot.get_dof_index(f"caster_{corner}_swivel_joint") for corner in ("fl", "fr", "rl", "rr")])
             robot.set_joint_positions(np.full(4, math.radians(a.caster_yaw_deg)), joint_indices=caster_indices)
-        wheel_names = ["left_drive", "right_drive"] + [f"caster_{corner}_wheel" for corner in ("fl", "fr", "rl", "rr")]
+        wheel_names = list(drive_layout.wheels)
+        if not scout:
+            wheel_names += [f"caster_{corner}_wheel" for corner in ("fl", "fr", "rl", "rr")]
         wheel_view = RigidPrim([f"{root}/{name}" for name in wheel_names], name="wheel_poses",
                                reset_xform_properties=False, prepare_contact_sensors=False)
         wheel_view.initialize()
-        drive_names = ["left_drive_joint", "right_drive_joint"]
+        drive_names = [name + '_joint' for name in drive_layout.wheels]
         indices = np.array([robot.get_dof_index(n) for n in drive_names], dtype=np.int32)
         all_joint_names = list(robot.dof_names)
-        if len(all_joint_names) != (19 if a.robot == "locomanipulator" else 10):
+        if len(all_joint_names) != {'amr': 10, 'locomanipulator': 19, 'scout': 4}[a.robot]:
             raise RuntimeError(f"Unexpected robot DOFs, received {all_joint_names}")
 
         d = cfg["drive"]
@@ -205,7 +226,9 @@ def run(a, cfg, report):
             "tf_static": node.create_publisher(TFMessage, "/tf_static", static_qos),
             "robot_description": node.create_publisher(String, "/robot_description", static_qos),
         }
-        description = (PROJECT / "src/aprl_robot_sim/urdf" / f"{a.robot}.urdf").read_text()
+        description_path = (PROJECT / 'src/scout_twin_description/urdf/scout_twin.urdf' if scout
+                            else PROJECT / 'src/aprl_robot_sim/urdf' / f'{a.robot}.urdf')
+        description = description_path.read_text()
         pubs["robot_description"].publish(String(data=description))
         current_time = [float(sim.current_time)]
         ready = [False]
@@ -224,7 +247,7 @@ def run(a, cfg, report):
             return Time(sec=ns // 1_000_000_000, nanosec=ns % 1_000_000_000)
 
         from isaac_runtime.sensors import Sensors
-        sensors = Sensors(stage, node, cfg, data_qos, stamp, imu)
+        sensors = Sensors(stage, node, cfg, data_qos, stamp, imu, a.robot)
         sensors.initialize()
         elevator_pub = node.create_publisher(String, '/elevator/state', reliable_qos)
         if not a.inspection:
@@ -278,43 +301,61 @@ def run(a, cfg, report):
 
         cache = UsdGeom.XformCache(Usd.TimeCode.Default())
         static_transforms = []
-        camera_specs = {side: (f'{base_path}/{side}_camera_link', camera_cfg) for side in ('front', 'rear')}
+        camera_specs: dict[str, CameraSpec] = {side: {
+            'path': f'{base_path}/{side}_camera_link', 'sensor': 'camera', 'config': camera_cfg,
+            'channels': ('color', 'depth'), 'topic': f'/{side}_camera',
+            'frame': f'{side}_camera_optical_frame'} for side in ('front', 'rear')}
+        if scout:
+            camera_specs = scout_camera_specs(base_path, cfg)
         if a.robot == 'locomanipulator':
             wrist = next(p for p in stage.Traverse() if p.GetName() == 'wrist_camera_link')
-            camera_specs['wrist'] = (str(wrist.GetPath()), cfg['manipulator']['wrist_camera'])
-        report["camera_frames"] = {"front": 0, "rear": 0}
-        report["camera_valid_depth_frames"] = {"front": 0, "rear": 0}
-        for side, (path, camera_settings) in camera_specs.items():
-            link = f"{side}_camera_link"
+            camera_specs['wrist'] = {
+                'path': str(wrist.GetPath()), 'sensor': 'camera', 'config': cfg['manipulator']['wrist_camera'],
+                'channels': ('color', 'depth'), 'topic': '/wrist_camera', 'frame': 'wrist_camera_optical_frame'}
+        report["camera_frames"] = dict.fromkeys(camera_specs, 0)
+        report["camera_valid_depth_frames"] = dict.fromkeys(camera_specs, 0)
+        for side, spec in camera_specs.items():
+            path, camera_settings = spec['path'], spec['config']
+            sensor_path = f"{path}/{spec['sensor']}"
+            link = stage.GetPrimAtPath(path).GetName()
             parent = base_path if side != 'wrist' else str(stage.GetPrimAtPath(path).GetParent().GetPath())
-            static_transforms.append(transform(stage.GetPrimAtPath(parent).GetName(), link, relative(path, parent, cache), 0))
+            if not any(t.child_frame_id == link for t in static_transforms):
+                static_transforms.append(transform(stage.GetPrimAtPath(parent).GetName(), link, relative(path, parent, cache), 0))
+            cam = Camera(prim_path=sensor_path, name=side.replace('/', '_') + '_rgbd',
+                         frequency=int(camera_settings['hz']),
+                         resolution=(int(camera_settings['width']), int(camera_settings['height'])))
+            if scout:
+                configure_camera(cam, stage, spec['channels'][0], cfg)
+            cam.initialize(attach_rgb_annotator='color' in spec['channels'])
+            if 'depth' in spec['channels']:
+                cam.add_distance_to_image_plane_to_frame()
+            cam.set_clipping_range(0.01, camera_settings.get('clip_far_m', 20.0))
+            cache.Clear()
             # USD camera: -Z forward, +Y up. ROS optical: +Z forward, +Y down.
             usd_to_optical = Gf.Matrix4d().SetRotate(Gf.Rotation(Gf.Vec3d(1, 0, 0), 180))
-            optical_in_link = usd_to_optical * relative(f"{path}/camera", path, cache)
-            static_transforms.append(transform(link, f"{side}_camera_optical_frame", optical_in_link, 0))
-            cam = Camera(prim_path=f"{path}/camera", name=f"{side}_rgbd",
-                         frequency=int(camera_settings["hz"]),
-                         resolution=(int(camera_settings["width"]), int(camera_settings["height"])))
-            cam.initialize()
-            cam.add_distance_to_image_plane_to_frame()
-            # Pinhole intrinsics already authored in USD; publish their actual values.
-            cam.set_clipping_range(0.01, 20.0)
-            cameras.append({"name": side, "camera": cam, "config": camera_settings, "last_frame": None,
+            optical_in_link = usd_to_optical * relative(sensor_path, path, cache)
+            static_transforms.append(transform(link, spec['frame'], optical_in_link, 0))
+            cameras.append({**spec, "name": side, "camera": cam, "last_frame": None,
                             "last_publish_time": -math.inf, "count": 0,
                             "valid_depth_frames": 0, "textured_rgb_frames": 0})
-            topic = f'/{side}_camera/depth/points'
-            pubs[topic] = node.create_publisher(PointCloud2, topic, data_qos)
-            for channel in ("color", "depth"):
-                prefix = f"/{side}_camera/{channel}"
+            if len(spec['channels']) == 2:
+                topic = spec['topic'] + '/depth/points'
+                pubs[topic] = node.create_publisher(PointCloud2, topic, data_qos)
+            for channel in spec['channels']:
+                prefix = f"{spec['topic']}/{channel}"
                 pubs[prefix + "/image_raw"] = node.create_publisher(Image, prefix + "/image_raw", data_qos)
                 pubs[prefix + "/camera_info"] = node.create_publisher(CameraInfo, prefix + "/camera_info", data_qos)
-        for side in ("front_right", "rear_left"):
+        for side in scan_sides:
             link = f"{side}_lidar_link"
             static_transforms.append(transform("base_link", link, relative(f"{base_path}/{link}", base_path, cache), 0))
             topic = f"/{side}_lidar/scan"
             pubs[topic] = node.create_publisher(LaserScan, topic, data_qos)
-        for link in ('flash_lidar_link', 'imu_link'):
-            static_transforms.append(transform('base_link', link, relative(f'{base_path}/{link}', base_path, cache), 0))
+        fixed_links = [(base_path, base_path + '/mid360_link'),
+                       (base_path + '/mid360_link', base_path + '/mid360_link/imu_link')] if scout else [
+                       (base_path, f'{base_path}/{link}') for link in ('flash_lidar_link', 'imu_link')]
+        for parent, child in fixed_links:
+            static_transforms.append(transform(stage.GetPrimAtPath(parent).GetName(), stage.GetPrimAtPath(child).GetName(),
+                                               relative(child, parent, cache), 0))
         pubs["tf_static"].publish(TFMessage(transforms=static_transforms))
 
         moving_links = []
@@ -378,14 +419,14 @@ def run(a, cfg, report):
             joints.velocity = np.asarray(robot.get_joint_velocities(), dtype=float).tolist()
             # Effort left empty: a target is not measured actuator torque.
             pubs["joint_states"].publish(joints)
-            sensors.publish_wheels(seconds, np.asarray(joints.position)[indices])
+            sensors.publish_wheels(seconds, drive_layout.encoder_positions(np.asarray(joints.position)[indices]))
             report["end_base_position_m"] = pos.tolist()
             report["end_yaw_rad"] = yaw
             if seconds - last_physics_sample[0] >= 0.1 - dt / 2:
                 positions, orientations = wheel_view.get_world_poses()
                 wheel_states = {}
                 for index, name in enumerate(wheel_names):
-                    wc = cfg["drive"] if name.endswith("drive") else cfg["caster"]
+                    wc = cfg["drive"] if name in drive_layout.wheels else cfg["caster"]
                     usd_pos = world_matrix(f"{root}/{name}", c).ExtractTranslation()
                     wheel_states[name] = {"bottom_z_m": cylinder_bottom(positions[index], orientations[index], wc["radius_m"], wc["width_m"]),
                                           "position_m": positions[index].tolist(),
@@ -407,11 +448,11 @@ def run(a, cfg, report):
             if "start_base_position_m" not in report:
                 report["start_base_position_m"] = pos.tolist()
 
-        def camera_info(camera, seconds, side, camera_settings):
+        def camera_info(camera, seconds, frame_id, camera_settings):
             k = np.asarray(camera.get_intrinsics_matrix(), dtype=np.float64)
             info = CameraInfo()
             info.header.stamp = stamp(seconds)
-            info.header.frame_id = f"{side}_camera_optical_frame"
+            info.header.frame_id = frame_id
             info.width, info.height = int(camera_settings["width"]), int(camera_settings["height"])
             info.distortion_model = "plumb_bob"
             info.d = [0.0] * 5
@@ -428,7 +469,7 @@ def run(a, cfg, report):
                 width, height = int(settings["width"]), int(settings["height"])
                 frame = cam.get_current_frame()
                 try:
-                    sample = camera_sample(frame, width, height, seconds, dt)
+                    sample = camera_sample(frame, width, height, seconds, dt, entry['channels'])
                 except ValueError as exc:
                     raise RuntimeError(f"{side} camera: {exc}") from exc
                 if sample is None:
@@ -440,36 +481,41 @@ def run(a, cfg, report):
                     continue
                 entry["last_frame"] = key
                 entry["last_publish_time"] = timestamp
-                rgb = np.ascontiguousarray(rgba[:, :, :3], dtype=np.uint8)
-                depth = np.ascontiguousarray(depth, dtype="<f4")
-                valid = np.isfinite(depth) & (depth >= settings["min_depth_m"]) & (depth <= settings["max_depth_m"])
-                depth = depth.copy()
-                depth[~valid] = np.nan
-                info = camera_info(cam, timestamp, side, settings)
-                pubs[f"/{side}_camera/depth/points"].publish(pointcloud(depth, rgb, info, settings["pointcloud_stride"]))
-                for channel, data, encoding, bpp in (("color", rgb, "rgb8", 3), ("depth", depth, "32FC1", 4)):
+                images = []
+                if rgba is not None:
+                    rgb = np.ascontiguousarray(rgba[:, :, :3], dtype=np.uint8)
+                    images.append(('color', rgb, 'rgb8', 3))
+                    entry['textured_rgb_frames'] += int(float(np.std(rgb.astype(np.float32))) > 1.0)
+                if depth is not None:
+                    depth = np.ascontiguousarray(depth, dtype='<f4').copy()
+                    valid = np.isfinite(depth) & (depth >= settings['min_depth_m']) & (depth <= settings['max_depth_m'])
+                    depth[~valid] = np.nan
+                    images.append(('depth', depth, '32FC1', 4))
+                    entry['valid_depth_frames'] += int(np.any(valid))
+                info = camera_info(cam, timestamp, entry['frame'], settings)
+                if rgba is not None and depth is not None:
+                    pubs[entry['topic'] + '/depth/points'].publish(pointcloud(depth, rgb, info, settings['pointcloud_stride']))
+                for channel, data, encoding, bpp in images:
                     msg = Image()
                     msg.header = info.header
                     msg.width, msg.height = width, height
                     msg.encoding, msg.is_bigendian, msg.step = encoding, 0, width * bpp
                     msg.data = data.tobytes()
-                    topic = f"/{side}_camera/{channel}"
+                    topic = f"{entry['topic']}/{channel}"
                     pubs[topic + "/image_raw"].publish(msg)
                     pubs[topic + "/camera_info"].publish(info)
                 entry["count"] += 1
-                entry["valid_depth_frames"] += int(np.any(valid))
-                entry["textured_rgb_frames"] += int(float(np.std(rgb.astype(np.float32))) > 1.0)
                 report["camera_frames"][side] = entry["count"]
                 report["camera_valid_depth_frames"][side] = entry["valid_depth_frames"]
 
         query = omni.physx.get_physx_scene_query_interface()
-        scan_counts = {s: 0 for s in ("front_right", "rear_left")}
+        scan_counts = {s: 0 for s in scan_sides}
         finite_scan_counts = {s: 0 for s in scan_counts}
         report["scan_frames"], report["scan_finite_frames"] = scan_counts, finite_scan_counts
-        samples = int(lidar_cfg["samples"])
-        if samples < 2:
+        samples = int(lidar_cfg['samples']) if scan_sides else 0
+        if scan_sides and samples < 2:
             raise ValueError("lidar.samples must be at least 2")
-        half_fov = math.radians(float(lidar_cfg["fov_deg"])) / 2
+        half_fov = math.radians(float(lidar_cfg['fov_deg'])) / 2 if scan_sides else 0
         angles = np.linspace(-half_fov, half_fov, samples)
         local_dirs = [Gf.Vec3d(math.cos(v), math.sin(v), 0) for v in angles]
 
@@ -511,7 +557,9 @@ def run(a, cfg, report):
 
         if not a.headless or a.capture_orbit:
             from isaac_runtime.views import RobotViews
-            views = RobotViews(stage, tall=a.robot == "locomanipulator")
+            eye_path = (base_path + '/camera_front_link/color_sensor' if scout else
+                        base_path + '/front_camera_link/camera')
+            views = RobotViews(stage, tall=a.robot != 'amr', eye_path=eye_path)
             if a.inspection:
                 views.select('orbit')
         capture = None
@@ -524,12 +572,13 @@ def run(a, cfg, report):
                        "ros_distro": os.environ.get("ROS_DISTRO", "jazzy"),
                        "initial_caster_yaw_deg": a.caster_yaw_deg, "joint_names": all_joint_names,
                        "odom_source": "wheel joint encoder integration; separate /ground_truth/odom",
-                       "lidar_source": "PhysX raycast_all, ideal instantaneous scan, robot self-filter",
+                       "lidar_source": ('RTX MID-360 rotary FOV/rate approximation' if scout else
+                                        'PhysX 2D raycast_all + RTX FLASH'),
                        "camera_source": "RTX RGBA and distance_to_image_plane annotators"})
         stop_requested = [False]
         signal.signal(signal.SIGINT, lambda *_: stop_requested.__setitem__(0, True))
         signal.signal(signal.SIGTERM, lambda *_: stop_requested.__setitem__(0, True))
-        render_every, scan_every = phz // rhz, phz // int(lidar_cfg["hz"])
+        render_every, scan_every = phz // rhz, phz // lidar_hz
         state_every = max(1, phz // 60)
         frame_idx = 0
         start_sim, start_wall = float(sim.current_time), time.monotonic()
@@ -555,7 +604,7 @@ def run(a, cfg, report):
                     limiter.requested_linear = limiter.requested_angular = 0.0
                 arm.step(dt, current_time[0])
             left, right = limiter.step(dt, current_time[0], time.monotonic())
-            robot.apply_action(ArticulationAction(joint_velocities=np.array([left, right]), joint_indices=indices))
+            robot.apply_action(ArticulationAction(joint_velocities=np.array(drive_layout.targets(left, right)), joint_indices=indices))
             sim.step(render=False)
             # Reading transforms from USD is intentional; force their physical state current.
             omni.physx.get_physx_interface().update_transformations(False, True, True)
@@ -576,7 +625,7 @@ def run(a, cfg, report):
                     views.update(seconds)
                 sim.render()
                 publish_cameras(seconds)
-                sensors.publish_cloud()
+                sensors.publish_cloud(seconds)
                 if capture and seconds > 3.0 and capture_count < 120:
                     from PIL import Image as PILImage
                     rgba = capture.get_rgba()
@@ -586,21 +635,22 @@ def run(a, cfg, report):
             report["sensor_frames"] = dict(sensors.counts)
             elapsed = seconds - start_sim
             if not ready[0]:
-                sensors_ready = all(e["count"] > 0 and (e["name"] == "wrist" or
-                                    (e["textured_rgb_frames"] > 0 and e["valid_depth_frames"] > 0)) for e in cameras)
+                sensors_ready = all(e['count'] > 0 and (e['name'] == 'wrist' or
+                                    (('color' not in e['channels'] or e['textured_rgb_frames'] > 0) and
+                                     ('depth' not in e['channels'] or e['valid_depth_frames'] > 0))) for e in cameras)
                 sensors_ready &= a.inspection or all(finite_scan_counts[s] > 0 for s in scan_counts)
-                sensors_ready &= sensors.counts["imu"] > 0 and sensors.counts["flash"] > 0
+                sensors_ready &= sensors.counts['imu'] > 0 and sensors.counts[sensors.cloud_kind] > 0
                 if elapsed >= 2.0 and sensors_ready and physics_health.ready:
                     ready[0] = True
                     ready_time = seconds
                     report["startup_checks_passed"] = True
                     report["settled_base_z_m"] = report["end_base_position_m"][2]
-                    print("AMR_READY: RGBD, 2D/FLASH lidar, IMU, wheel odometry and elevators are live. /cmd_vel enabled.", flush=True)
+                    print(f"{'SCOUT' if scout else 'AMR'}_READY: RGBD, {sensors.cloud_kind} lidar, IMU, wheel odometry and elevators are live. /cmd_vel enabled.", flush=True)
                 elif time.monotonic() - startup_wall > a.startup_timeout:
                     raise RuntimeError(f"Startup check failed: sensors_ready={sensors_ready}, "
                                        f"physics_stable={physics_health.ready}, camera_frames={report['camera_frames']}")
             if time.monotonic() - last_status_wall > 10:
-                print(f"AMR sim={elapsed:.1f}s ready={ready[0]} cmd_count={limiter.accepted} "
+                print(f"{a.robot} sim={elapsed:.1f}s ready={ready[0]} cmd_count={limiter.accepted} "
                       f"camera_frames={[e['count'] for e in cameras]} scans={scan_counts} "
                       f"tilt_deg={report['physics_latest']['tilt_deg']:.3f}", flush=True)
                 if a.physics_trace:

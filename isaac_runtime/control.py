@@ -3,6 +3,26 @@ from dataclasses import dataclass
 import math
 
 
+@dataclass(frozen=True)
+class DriveLayout:
+    wheels: tuple[str, ...]
+    sides: tuple[int, ...]
+
+    def targets(self, left, right):
+        return tuple((left, right)[side] for side in self.sides)
+
+    def encoder_positions(self, positions):
+        if len(positions) != len(self.sides):
+            raise ValueError("Expected one encoder position per drive wheel")
+        return tuple(sum(float(p) for p, s in zip(positions, self.sides) if s == side)
+                     / self.sides.count(side) for side in (0, 1))
+
+
+AMR_DRIVE = DriveLayout(("left_drive", "right_drive"), (0, 1))
+SCOUT_DRIVE = DriveLayout(("front_left_wheel", "rear_left_wheel",
+                           "front_right_wheel", "rear_right_wheel"), (0, 0, 1, 1))
+
+
 @dataclass
 class DriveLimiter:
     radius: float = 0.1

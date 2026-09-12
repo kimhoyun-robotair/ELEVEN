@@ -1,5 +1,36 @@
 # Assets and source references
 
+## Scout Mini import
+
+`assets/robot/scout.usd` is a byte-for-byte copy of
+`scout_mini_isaac510_ros2_jazzy/scout_twin/assets/usd/scout_robot.usd` supplied
+locally by the user. It embeds its meshes and materials without external assets.
+`config/scout.json` is the original configuration. The full description package,
+URDF and OBJ/MTL meshes are copied into `src/scout_twin_description`; build/install
+trees, the source test world and its separate simulator are not needed at runtime.
+The source package declares Apache-2.0. Its [source notes](../src/scout_twin_description/SOURCES.md)
+retain the model assumptions and original references.
+
+The shared runtime preserves the Scout USD and URDF, including the sensor rig,
+four +Y wheel axes, 80 mm tires, MID-360/embedded IMU mounts and all three RGBD
+mounts. The base origin is at axle height; the APRL footprint spawn adds 80 mm.
+Drive acceleration limits are 0.6 m/s² and 1.5 rad/s² in the integration adapter.
+Scout route alignment uses a minimum 0.25 rad/s pivot command outside the normal
+heading tolerance to overcome observed skid friction. The imported pivot checker
+allows for slip in its simulation-time budget and still checks measured yaw,
+drift and counter-rotating wheel velocities.
+Native camera and lidar sensors are configured in the session layer. The source
+RGB/depth intrinsics and MID-360 geometric scan approximation are retained.
+The shared scene's existing landing-sill offset also applies to Scout.
+
+ROS domain selection now respects APRL's `ROS_DOMAIN_ID` (default 73). The
+simulator publishes the original description and all TF, while the standalone
+description launch enables state publishers explicitly for preview. Source
+inspection scripts use `/ground_truth/odom` and `sim_world`; `/odom` consistently
+means wheel-encoder odometry for every APRL robot.
+
+## AMR
+
 `assets/robot/amr_body.usda` is the original AMR USD from `amr_isaac51`,
 retained byte for byte. It is a photo-guided parametric model, not a calibrated
 scan of the real machine. The original chassis, two drive joints, eight passive

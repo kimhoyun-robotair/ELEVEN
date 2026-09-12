@@ -8,13 +8,24 @@ from isaacsim.sensors.rtx import LidarRtx
 
 
 class Sensors:
-    def __init__(self, stage, node, cfg, qos, stamp, imu):
+    def __init__(self, stage, node, cfg, qos, stamp, imu, robot='amr'):
         self.cfg, self.stamp = cfg, stamp
         base = '/World/Robot/base_link'
         self.imu = imu
-        self.imu_pub = node.create_publisher(Imu, '/imu/data', qos)
-        self.cloud_pub = node.create_publisher(PointCloud2, '/mlx/pointcloud', qos)
+        self.imu_pub = node.create_publisher(Imu, '/mid360/imu' if robot == 'scout' else '/imu/data', qos)
         self.odom_pub = node.create_publisher(Odometry, '/odom', 10)
+        self.cloud_kind = 'mid360' if robot == 'scout' else 'flash'
+        self.last_imu = self.last_cloud = -math.inf
+        self.counts = {'imu': 0, self.cloud_kind: 0, 'wheel_odom': 0}
+        self.wheel_pose = np.zeros(3)
+        self.last_wheels = None
+        self.last_wheel_time = None
+        self.lidar = self.mid360 = None
+        if robot == 'scout':
+            from isaac_runtime.scout import Mid360Lidar
+            self.mid360 = Mid360Lidar(cfg['lidar'], node, qos, stamp)
+            return
+        self.cloud_pub = node.create_publisher(PointCloud2, '/mlx/pointcloud', qos)
         f = cfg['flash_lidar']
         prim = stage.DefinePrim(base + '/flash_lidar_link/sensor', 'OmniLidar')
         prim.ApplyAPI('OmniSensorGenericLidarCoreAPI')
@@ -45,15 +56,11 @@ class Sensors:
         self.lidar = LidarRtx(str(prim.GetPath()), name='amr_flash_lidar')
         self.annotator = 'IsaacCreateRTXLidarScanBuffer'
         self.lidar.attach_annotator(self.annotator, transformPoints=False, outputIntensity=True)
-        self.last_imu = self.last_cloud = -math.inf
-        self.counts = {'imu': 0, 'flash': 0, 'wheel_odom': 0}
-        self.wheel_pose = np.zeros(3)
-        self.last_wheels = None
-        self.last_wheel_time = None
 
     def initialize(self):
         self.imu.initialize()
-        self.lidar.initialize()
+        if self.lidar is not None:
+            self.lidar.initialize()
 
     def publish_imu(self):
         frame = self.imu.get_current_frame(read_gravity=True)
@@ -72,7 +79,12 @@ class Sensors:
         self.imu_pub.publish(msg)
         self.counts['imu'] += 1
 
-    def publish_cloud(self):
+    def publish_cloud(self, seconds):
+        if self.mid360 is not None:
+            self.counts['mid360'] += int(self.mid360.publish(seconds))
+            return
+        if self.lidar is None:
+            raise RuntimeError('No RTX lidar configured')
         frame = self.lidar.get_current_frame()
         seconds = float(frame['rendering_time'])
         if seconds <= 0 or seconds - self.last_cloud < 1 / self.cfg['flash_lidar']['hz'] - 1e-5:
@@ -134,4 +146,7 @@ class Sensors:
         self.counts['wheel_odom'] += 1
 
     def close(self):
-        self.lidar.detach_all_annotators()
+        if self.lidar is not None:
+            self.lidar.detach_all_annotators()
+        if self.mid360 is not None:
+            self.mid360.close()

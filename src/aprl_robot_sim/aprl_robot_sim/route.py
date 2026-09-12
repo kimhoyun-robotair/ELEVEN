@@ -14,6 +14,8 @@ from std_msgs.msg import String
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# The 180-degree arm mount presses rearward, keeping the front LiDAR clear of the panel.
+DOCK_YAW = -math.pi/2
 
 
 def angle_error(target, current):
@@ -85,25 +87,32 @@ class Route(Node):
                 next_open = now+.3
         raise RuntimeError('ROS shutdown during route')
 
-    def go(self, target, hold_door=False, tolerance=.08):
-        print(f"{self.phase}: drive to {target}", flush=True)
+    def go(self, target, hold_door=False, tolerance=.08, reverse=False):
+        print(f"{self.phase}: {'reverse' if reverse else 'drive'} to {target}", flush=True)
         def control():
             dx, dy = target[0]-self.pose[0], target[1]-self.pose[1]
-            error = angle_error(math.atan2(dy, dx), self.pose[3])
+            error = angle_error(math.atan2(dy, dx) + (math.pi if reverse else 0), self.pose[3])
             v = min(self.speed, .9*math.hypot(dx,dy)) if abs(error) < .4 else 0.0
-            return v, max(-.65, min(.65, 1.8*error))
+            return -v if reverse else v, max(-.65, min(.65, 1.8*error))
         self.wait(lambda: math.dist(target, self.pose[:2]) < tolerance,
                   control=control, hold_door=hold_door)
 
     def face(self, yaw, hold_door=False):
+        def control():
+            error = angle_error(yaw, self.pose[3])
+            angular = max(-.6, min(.6, 1.5*error))
+            # Four-wheel skid steering stalls at small proportional pivot commands.
+            if self.robot == 'scout' and abs(error) >= .035:
+                angular = math.copysign(max(.25, abs(angular)), error)
+            return 0, angular
         self.wait(lambda: abs(angle_error(yaw, self.pose[3])) < .035,
-                  control=lambda: (0, max(-.6, min(.6, 1.5*angle_error(yaw, self.pose[3])))),
+                  control=control,
                   hold_door=hold_door)
 
     def straight_to(self, y, hold_door=False):
         def control():
-            error = angle_error(math.pi/2, self.pose[3])
-            speed = max(-self.speed, min(self.speed, .8*(y-self.pose[1]))) if abs(error) < .12 else 0.0
+            error = angle_error(DOCK_YAW, self.pose[3])
+            speed = max(-self.speed, min(self.speed, .8*(self.pose[1]-y))) if abs(error) < .12 else 0.0
             return speed, max(-.45, min(.45, 1.8*error))
         self.wait(lambda: abs(y-self.pose[1]) < .025, control=control, hold_door=hold_door)
 
@@ -139,7 +148,7 @@ class Route(Node):
         if self.robot == 'locomanipulator':
             self.phase = 'hall_button'
             self.go(self.route['hall_dock'], tolerance=.025)
-            self.face(math.pi/2)
+            self.face(DOCK_YAW)
             self.physical_press('hall', self.route['from_floor'])
             self.go(self.route['lobby'], hold_door=True)
             self.press('open')
@@ -150,9 +159,10 @@ class Route(Node):
         self.go(self.route['cabin'], hold_door=True)
         if self.robot == 'locomanipulator':
             self.phase = 'cabin_button'
-            self.go([self.route['floor_dock'][0], self.route['cabin'][1]], hold_door=True, tolerance=.025)
-            self.go([self.route['floor_dock'][0], self.route['floor_dock'][1]-.4], hold_door=True, tolerance=.025)
-            self.face(math.pi/2, hold_door=True)
+            self.face(DOCK_YAW, hold_door=True)
+            self.go([self.route['floor_dock'][0], self.route['floor_dock'][1]-.4],
+                    hold_door=True, tolerance=.025, reverse=True)
+            self.face(DOCK_YAW, hold_door=True)
             self.straight_to(self.route['floor_dock'][1], hold_door=True)
         else:
             self.phase = 'face_exit'
@@ -169,7 +179,8 @@ class Route(Node):
             self.press('floor', self.route['to_floor'])
         self.wait(lambda: self.cabin()['floor'] == self.route['to_floor']-1 and self.cabin()['doorOpen'] > .99)
         height = self.cabin()['position']
-        if abs(self.pose[2] - height - .15) > .1:
+        base_height = .08 if self.robot == 'scout' else .15
+        if abs(self.pose[2] - height - base_height) > .1:
             raise RuntimeError('Cabin arrived but the physical robot did not ride with it')
         arrived = self.state['sim_time']
         self.wait(lambda: self.state['sim_time'] - arrived >= 4, hold_door=True)
@@ -195,7 +206,7 @@ class Route(Node):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--scene', choices=('office','house'), default='office')
-    parser.add_argument('--robot', choices=('amr','locomanipulator'), default='amr')
+    parser.add_argument('--robot', choices=('amr','locomanipulator','scout'), default='amr')
     parser.add_argument('--file', type=Path)
     parser.add_argument('--speed', type=float, default=.45)
     parser.add_argument('--report', type=Path, default=Path('.runtime/logs/route.json'))

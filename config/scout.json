@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "units": "m_kg_s_radians",
+  "coordinate_convention": "+X front (smile panel), +Y left, +Z up; base_link at axle height",
+  "base": {
+    "length": 0.612,
+    "width": 0.58,
+    "height": 0.245,
+    "wheelbase": 0.451,
+    "track": 0.49,
+    "wheel_radius": 0.08,
+    "wheel_width": 0.09,
+    "ground_clearance": 0.115,
+    "spawn_z": 0.083,
+    "chassis_mass": 18.2,
+    "wheel_mass": 1.2,
+    "max_linear_speed": 3.0,
+    "max_angular_speed": 1.0,
+    "command_timeout": 0.5,
+    "total_mass_estimate": 32.67
+  },
+  "frame": {
+    "height": 1.05,
+    "outer_x": 0.27,
+    "outer_y": 0.27,
+    "profile": 0.03,
+    "bottom_z": 0.165,
+    "mass_estimate": 6.0
+  },
+  "payload_mass_estimate": 3.0,
+  "lidar": {
+    "name": "mid360",
+    "xyz": [
+      0.209,
+      0.0,
+      0.247
+    ],
+    "rpy": [
+      0,
+      0,
+      0
+    ],
+    "size": [
+      0.065,
+      0.065,
+      0.06
+    ],
+    "mass": 0.265,
+    "min_range": 0.1,
+    "max_range": 40.0,
+    "elevation_min_deg": -7.0,
+    "elevation_max_deg": 52.0,
+    "horizontal_fov_deg": 360.0,
+    "rate_hz": 10,
+    "points_per_second": 200000,
+    "imu_offset": [
+      0.011,
+      0.02329,
+      -0.04412
+    ],
+    "housing_bottom_z": 0.2,
+    "optical_origin_above_housing_bottom": 0.047
+  },
+  "cameras": [
+    {
+      "name": "camera_front",
+      "xyz": [
+        0.005,
+        0,
+        1.441
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "camera_left",
+      "xyz": [
+        0,
+        0.104,
+        1.336
+      ],
+      "rpy": [
+        0,
+        0,
+        1.5707963267948966
+      ]
+    },
+    {
+      "name": "camera_right",
+      "xyz": [
+        0,
+        -0.104,
+        1.336
+      ],
+      "rpy": [
+        0,
+        0,
+        -1.5707963267948966
+      ]
+    }
+  ],
+  "camera_spec": {
+    "width_m": 0.124,
+    "height_m": 0.029,
+    "depth_m": 0.0277,
+    "mass": 0.135,
+    "resolution": [
+      640,
+      400
+    ],
+    "rate_hz": 15,
+    "rgb_hfov_deg": 94.0,
+    "rgb_vfov_deg": 68.0,
+    "depth_hfov_deg": 90.0,
+    "depth_vfov_deg": 65.0,
+    "min_depth": 0.17,
+    "max_depth": 20.0,
+    "clip_far": 50.0,
+    "optical_xyz": [
+      0.0145,
+      0,
+      0
+    ]
+  },
+  "simulation": {
+    "physics_hz": 240,
+    "render_hz": 30,
+    "imu_hz": 200,
+    "state_hz": 30,
+    "wheel_effort_limit_nm": 12.0,
+    "wheel_damping": 1500.0,
+    "wheel_static_friction": 0.8,
+    "wheel_dynamic_friction": 0.65
+  },
+  "assumptions": [
+    "Photo-guided parametric reconstruction, not calibrated photogrammetry or manufacturer CAD.",
+    "Standard tire diameter160mm, wheelbase451mm, track490mm from manual drawing PDF45; width90mm derived from580mm envelope minus490mm center track.",
+    "105cm means profile structure height measured from deck, excludes camera brackets.",
+    "Frame footprint270mm, 30mm profiles, sensor extrinsics, brackets and mounted computer geometry estimated from photos.",
+    "Front is defined by the smile panel; high camera faces front, low cameras face left/right.",
+    "Rigid chassis and cosmetic suspension; masses and inertia of added structure estimated.",
+    "Pivot turn is physical four-wheel differential/skid steering; skid friction needs calibration.",
+    "RGB and depth ideal pinhole sensors, LiDAR geometric approximation; no vendor firmware/noise calibration."
+  ]
+}

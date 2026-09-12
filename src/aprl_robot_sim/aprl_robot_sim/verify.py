@@ -25,18 +25,24 @@ class StreamCheck(Node):
         self.ready = False
         self.robot = robot
         self.frames, self.matched = {}, {}
-        topics = {'/mlx/pointcloud':PointCloud2, '/imu/data':Imu, '/odom':Odometry,
+        topics: dict[str, type] = {'/odom':Odometry,
                   '/ground_truth/odom':Odometry, '/clock':Clock, '/joint_states':JointState,
                   '/tf':TFMessage, '/tf_static':TFMessage, '/elevator/state':String,
                   '/robot_description':String}
+        cloud, imu = ('/mid360/points', '/mid360/imu') if robot == 'scout' else ('/mlx/pointcloud', '/imu/data')
+        topics[cloud], topics[imu] = PointCloud2, Imu
         if robot == 'locomanipulator':
             topics['/arm/state'] = String
-        for side in (('front','rear','wrist') if robot == 'locomanipulator' else ('front','rear')):
-            topics[f'/{side}_camera/depth/points'] = PointCloud2
+        self.camera_names = (('camera_front', 'camera_left', 'camera_right') if robot == 'scout' else
+                             (('front_camera', 'rear_camera', 'wrist_camera') if robot == 'locomanipulator' else
+                              ('front_camera', 'rear_camera')))
+        for name in self.camera_names:
+            if robot != 'scout':
+                topics[f'/{name}/depth/points'] = PointCloud2
             for channel in ('color','depth'):
-                topics[f'/{side}_camera/{channel}/image_raw'] = Image
-                topics[f'/{side}_camera/{channel}/camera_info'] = CameraInfo
-        for side in ('front_right','rear_left'):
+                topics[f'/{name}/{channel}/image_raw'] = Image
+                topics[f'/{name}/{channel}/camera_info'] = CameraInfo
+        for side in (() if robot == 'scout' else ('front_right','rear_left')):
             topics[f'/{side}_lidar/scan'] = LaserScan
         if lio:
             topics['/LIO/odom_imu'] = Odometry
@@ -58,6 +64,7 @@ class StreamCheck(Node):
         if isinstance(msg, PointCloud2):
             if msg.width*msg.height == 0 or len(msg.data) != msg.row_step*msg.height:
                 self.errors.add(f'{topic}: invalid point buffer')
+                return
             if topic == '/mlx/pointcloud':
                 expected = [('x',0,7),('y',4,7),('z',8,7),('intensity',12,7),('t',16,6)]
                 if [(f.name,f.offset,f.datatype) for f in msg.fields] != expected or msg.point_step != 20:
@@ -70,6 +77,18 @@ class StreamCheck(Node):
                 if np.any(xyz[:,0] <= 0) or np.max(np.abs(np.degrees(np.arctan2(xyz[:,1],xyz[:,0])))) > 60.1:
                     self.errors.add('FLASH: incorrect forward axis/FOV')
                 self.details['flash'] = {'points':len(data),'range_m':[float(np.linalg.norm(xyz,axis=1).min()),float(np.linalg.norm(xyz,axis=1).max())]}
+            elif topic == '/mid360/points':
+                if ([(f.name, f.offset, f.datatype) for f in msg.fields] !=
+                        [('x',0,7),('y',4,7),('z',8,7),('intensity',12,7)] or msg.point_step != 16):
+                    self.errors.add('MID-360: unexpected XYZ/intensity layout')
+                    return
+                data = np.frombuffer(msg.data, dtype='<f4').reshape(-1, 4)
+                ranges = np.linalg.norm(data[:, :3], axis=1)
+                if msg.header.frame_id != 'mid360_link' or not np.isfinite(data).all():
+                    self.errors.add('MID-360: invalid frame or nonfinite returns')
+                if np.any(ranges < .1 - 1e-4) or np.any(ranges > 40 + 1e-4):
+                    self.errors.add('MID-360: returns outside configured range')
+                self.details['mid360'] = {'points':len(data), 'range_m':[float(ranges.min()),float(ranges.max())]}
             elif '_camera/depth/points' in topic:
                 layout = [(f.name, f.offset, f.datatype) for f in msg.fields]
                 if layout != [('x',0,7),('y',4,7),('z',8,7),('rgb',12,7)] or msg.point_step != 16:
@@ -86,11 +105,15 @@ class StreamCheck(Node):
                 self.errors.add('IMU: nonfinite data')
             self.details['imu_acceleration'] = [a.x,a.y,a.z]
         elif isinstance(msg, JointState):
-            if len(msg.name) != (19 if self.robot == 'locomanipulator' else 10) or not np.isfinite(msg.position).all():
+            if (len(msg.name) != {'amr':10, 'locomanipulator':19, 'scout':4}[self.robot] or
+                    len(msg.position) != len(msg.name) or not np.isfinite(msg.position).all()):
                 self.errors.add('Unexpected or invalid articulation state')
             self.details['joint_names'] = list(msg.name)
         elif isinstance(msg, Image):
-            self.sync_camera(topic.split('/')[1], 'depth' if '/depth/' in topic else 'color', msg)
+            if self.robot == 'scout':
+                self.sync_scout_camera(topic, 'image', msg)
+            else:
+                self.sync_camera(topic.split('/')[1], 'depth' if '/depth/' in topic else 'color', msg)
             if len(msg.data) != msg.height*msg.step or msg.width == 0:
                 self.errors.add(f'{topic}: invalid image buffer')
             if '/depth/' in topic and msg.encoding == '32FC1':
@@ -98,7 +121,10 @@ class StreamCheck(Node):
                 if np.isfinite(depth).any():
                     self.details[topic] = {'finite_depth':int(np.isfinite(depth).sum())}
         elif isinstance(msg, CameraInfo):
-            self.sync_camera(topic.split('/')[1], 'info', msg)
+            if self.robot == 'scout':
+                self.sync_scout_camera(topic, 'info', msg)
+            else:
+                self.sync_camera(topic.split('/')[1], 'info', msg)
             if msg.k[0] <= 0 or msg.k[4] <= 0:
                 self.errors.add(f'{topic}: invalid focal length')
         elif isinstance(msg, LaserScan):
@@ -122,7 +148,8 @@ class StreamCheck(Node):
             if topic == '/robot_description':
                 try:
                     robot = ET.fromstring(msg.data)
-                    if robot.tag != 'robot' or robot.get('name') != self.robot:
+                    expected_name = 'scout_mini_photo_twin' if self.robot == 'scout' else self.robot
+                    if robot.tag != 'robot' or robot.get('name') != expected_name:
                         self.errors.add('URDF does not describe the selected robot')
                     self.details['robot_description'] = {
                         'name': robot.get('name'), 'bytes': len(msg.data.encode()),
@@ -138,6 +165,35 @@ class StreamCheck(Node):
                     self.errors.add('Robot selection does not match the running simulator')
             else:
                 self.details['arm'] = json.loads(msg.data)
+
+    def sync_scout_camera(self, topic, kind, msg):
+        prefix = '/'.join(topic.split('/')[:3])
+        stamp = (msg.header.stamp.sec, msg.header.stamp.nanosec)
+        frames = self.frames.setdefault(prefix, {})
+        frame = frames.setdefault(stamp, {})
+        frame[kind] = msg
+        while len(frames) > 8:
+            frames.pop(next(iter(frames)))
+        if not all(key in frame for key in ('image', 'info')):
+            return
+        pixels, info = frame['image'], frame['info']
+        expected_frame = prefix.strip('/').replace('/', '_') + '_optical_frame'
+        if pixels.header.frame_id != expected_frame or info.header.frame_id != expected_frame:
+            self.errors.add(f'{prefix}: incorrect optical frame')
+        if (pixels.width, pixels.height) != (info.width, info.height):
+            self.errors.add(f'{prefix}: image and intrinsics sizes differ')
+        expected_encoding = 'rgb8' if prefix.endswith('/color') else '32FC1'
+        if pixels.encoding != expected_encoding:
+            self.errors.add(f'{prefix}: incorrect image encoding')
+        if info.k[0] > 0:
+            hfov = math.degrees(2 * math.atan(info.width / (2 * info.k[0])))
+            expected_hfov = 94 if prefix.endswith('/color') else 90
+            if abs(hfov - expected_hfov) > .01:
+                self.errors.add(f'{prefix}: RGB/depth intrinsics do not match the Scout sensor')
+            self.details[prefix + '/intrinsics'] = {'hfov_deg':hfov, 'frame':expected_frame,
+                                                   'size':[info.width, info.height]}
+        self.matched[prefix] = self.matched.get(prefix, 0) + 1
+        del frames[stamp]
 
     def sync_camera(self, side, kind, msg):
         stamp = (msg.header.stamp.sec, msg.header.stamp.nanosec)
@@ -174,7 +230,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--timeout',type=float,default=180)
     p.add_argument('--seconds',type=float,default=5,help='Observe this many simulation seconds')
-    p.add_argument('--robot', choices=('amr','locomanipulator'), default='amr')
+    p.add_argument('--robot', choices=('amr','locomanipulator','scout'), default='amr')
     p.add_argument('--lio',action='store_true')
     p.add_argument('--report',type=Path,default=Path('.runtime/logs/streams.json'))
     a = p.parse_args()
@@ -196,13 +252,20 @@ def main():
         missing = set(description.get('links', ())) - frames
         if missing:
             node.errors.add(f'URDF links missing from live TF: {sorted(missing)}')
-        for edge in (('base_link','flash_lidar_link'),('base_link','imu_link'),('sim_world','base_footprint'),('base_footprint','base_link')):
+        sensor_edges = (('base_link','mid360_link'),('mid360_link','imu_link')) if a.robot == 'scout' else (
+                        ('base_link','flash_lidar_link'),('base_link','imu_link'))
+        for edge in (*sensor_edges, ('sim_world','base_footprint'),('base_footprint','base_link')):
             if edge not in node.edges:
                 node.errors.add(f'Missing TF {edge}')
-        for t in ('/front_camera/depth/image_raw','/rear_camera/depth/image_raw','/front_right_lidar/scan','/rear_left_lidar/scan'):
+        finite_topics = [f'/{name}/depth/image_raw' for name in node.camera_names if name != 'wrist_camera']
+        if a.robot != 'scout':
+            finite_topics += ['/front_right_lidar/scan', '/rear_left_lidar/scan']
+        for t in finite_topics:
             if t not in node.details:
                 node.errors.add(f'No finite return: {t}')
-        for side in ('front_camera','rear_camera'):
+        matches = ([f'/{name}/{channel}' for name in node.camera_names for channel in ('color','depth')]
+                   if a.robot == 'scout' else ['front_camera','rear_camera'])
+        for side in matches:
             if not node.matched.get(side):
                 node.errors.add(f'No simultaneous depth/color/cloud validation: {side}')
         report = {'camera_matches':node.matched, 'passed':not node.errors,'counts':node.counts,'errors':sorted(node.errors), 'details':node.details}
