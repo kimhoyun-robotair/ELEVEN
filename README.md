@@ -405,5 +405,6 @@ README의 회전 GIF, 실행용 자산, 자산 출처 문서는 배포에 포함
 # Future Work
 
 - [ ] README 정리
+- [ ] 코드 정리
 - [ ] Dockerize 검증
 - [ ] Elevator-LIO 검증
