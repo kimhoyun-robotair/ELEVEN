@@ -16,8 +16,7 @@ docs/*
 !docs/ASSETS.md
 !docs/amr-360.gif
 !docs/locomanipulator-360.gif
-!docs/amr-360.mp4
-!docs/locomanipulator-360.mp4
+!docs/scout-360.gif
 assets/robot/components/*.blend
 isaac_runtime/build_robot.py
 isaac_runtime/model_components.py

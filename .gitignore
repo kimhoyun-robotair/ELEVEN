@@ -19,8 +19,7 @@ __pycache__/
 /docs/*.mp4
 !/docs/amr-360.gif
 !/docs/locomanipulator-360.gif
-!/docs/amr-360.mp4
-!/docs/locomanipulator-360.mp4
+!/docs/scout-360.gif
 
 # Local authoring tools; runtime USD and ROS descriptions are distributed.
 /assets/robot/components/*.blend

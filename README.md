@@ -6,11 +6,11 @@ Office/House 다층 환경에서 AMR, NERO 팔과 gripper를 장착한 locomanip
 또는 Scout Mini 센서 리그를 선택합니다. 실제 PhysX 바퀴 구동과 엘리베이터 접촉으로
 이동하며, ROS teleop, RGBD, 로봇별 라이다·IMU, odometry, 관절 상태와 TF를 제공합니다.
 
-| AMR | AMR + NERO |
-|---|---|
-| [![AMR 회전](docs/amr-360.gif)](docs/amr-360.mp4) | [![Locomanipulator 회전](docs/locomanipulator-360.gif)](docs/locomanipulator-360.mp4) |
+| AMR | AMR + NERO | Scout Mini |
+|---|---|---|
+| [![AMR 회전](docs/amr-360.gif)](docs/amr-360.gif) | [![Locomanipulator 회전](docs/locomanipulator-360.gif)](docs/locomanipulator-360.gif) | [![Scout Mini 회전](docs/scout-360.gif)](docs/scout-360.gif) |
 
-이미지를 누르면 실제 Isaac USD 렌더링으로 만든 360° 영상을 열 수 있습니다.
+이미지를 누르면 실제 Isaac USD 렌더링으로 만든 360° 회전 GIF를 열 수 있습니다.
 
 ## 시작하기
 
@@ -398,6 +398,12 @@ FLASH의 현재 위치는 `base_link` 기준 `(0.400, 0, 0.022)` m, 회전은 **
 ```
 
 `--robot amr`로 기본 AMR, `--robot scout`로 Scout Mini를 확인할 수 있습니다.
-검증 기록·주행 녹화·Blender 원본·모델 재생성 도구·미사용 NERO 변형 모델은
+검증 기록·주행 녹화·회전 MP4·Blender 원본·모델 재생성 도구·미사용 NERO 변형 모델은
 로컬 개발 자료로 보관하며 Git 및 Docker 배포에서 제외합니다.
-README의 회전 GIF와 MP4, 실행용 자산, 자산 출처 문서는 배포에 포함합니다.
+README의 회전 GIF, 실행용 자산, 자산 출처 문서는 배포에 포함합니다.
+
+# Future Work
+
+- [ ] README 정리
+- [ ] Dockerize 검증
+- [ ] Elevator-LIO 검증
