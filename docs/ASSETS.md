@@ -1,5 +1,38 @@
 # Assets and source references
 
+## ELEVEN Research Building import
+
+`assets/scenes/research.usda` and its dependencies are copied byte for byte from
+the user-supplied `~/ELEVEN/scenes`. The imported set contains the entry layer,
+`research_geometry.usdc`, its 29 referenced `research_part_*.usdc` layers, and
+39 `research_textures/*.png` files: 70 new files, 102,720,499 bytes. Another
+40 referenced files in `textures/` already exist here with identical contents
+and are reused. All relative USD references are preserved. `OmniGlass.mdl` is
+provided by the installed Isaac Sim runtime, as in the source research stage.
+
+The source `ASSET_LICENSE.md` dedicates the original research architecture,
+furniture, elevators, materials and procedural textures under **CC0 1.0 Universal**.
+Its authoring sources are `tools/build_research.py`, `tools/research_props.py`,
+`tools/build_worlds.py` and `tools/furniture.py` in ELEVEN. The building interprets
+a supplied design reference at 60 × 18 m; it is not a measured reconstruction.
+Blender sources, glTF/web packages, source render galleries and ELEVEN's separate
+runtime are not part of this import. Runtime execution needs no ELEVEN checkout.
+
+`config/research.json` retains the floor heights, floor labels, footprint and
+elevator metadata needed to describe this world. The shared APRL runtime drives
+the existing three physical elevator rigs, retains their glass/opaque materials,
+and applies its existing -7 mm landing-sill adjustment in the session layer.
+Research's rectangular ceiling lights also receive the +11 exposure conversion
+already used by the source's disk lights. The source preparation step omitted
+this conversion for research ceiling lights, leaving the basement nearly black
+in Isaac's real-time renderer. This correction is confined to the session layer.
+The example starts at B1 (Z=0 m), travels through E1 to 1F (Z=4 m), and follows
+the clear central corridor on both levels. ROS commands keep 1-based level
+indices while GUI controls use the stage's B1/1F/2F/3F/4F/RF labels. The original
+cabin buttons are vertically stacked: the 1F button is 1.35 m above the cabin
+floor and the 2F button is 1.52 m high. The shared example uses the reachable
+1F button for physical NERO operation; higher levels remain selectable by GUI/ROS.
+
 ## Scout Mini import
 
 `assets/robot/scout.usd` is a byte-for-byte copy of

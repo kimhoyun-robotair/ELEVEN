@@ -205,7 +205,7 @@ class Route(Node):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--scene', choices=('office','house'), default='office')
+    parser.add_argument('--scene', choices=('office','house','research'), default='office')
     parser.add_argument('--robot', choices=('amr','locomanipulator','scout'), default='amr')
     parser.add_argument('--file', type=Path)
     parser.add_argument('--speed', type=float, default=.45)

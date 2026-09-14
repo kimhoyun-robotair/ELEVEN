@@ -132,3 +132,21 @@ Actions: `hall`, `floor`, `open`, `close`, `alarm`. Command floor numbers are 1-
 simultaneous RGBD images and clouds by depth equality, reprojection and RGB bytes.
 The route report records actual distance, height, contact impulses and trajectory.
 No generated messages or mock simulator are used for these checks.
+
+The third world, `research`, uses level names B1, 1F, 2F, 3F, 4F, RF at
+Z = 0, 4, 8, 12, 16, 20 m. Commands still use 1-based level indices:
+`floor: 2` selects 1F, and `floor: 3` selects 2F. State indices are 1 and 2,
+respectively. The GUI and modeled buttons show the authored level names.
+
+```sh
+./scripts/sim --scene research --robot locomanipulator
+# In a second terminal, after AMR_READY:
+./scripts/ros route --scene research --robot locomanipulator --report .runtime/research-route.json
+```
+
+The example drives 12 m along the B1 corridor, calls and boards E1, rides to 1F,
+then exits and drives another 12 m. Use `--robot amr` or `--robot scout` in both
+commands to run the same route with ROS elevator requests. The locomanipulator
+uses physical hall/cabin button contacts, as in the office and house examples.
+The 1F destination button is within the NERO arm's reach; higher destinations
+remain available through the GUI and ROS elevator commands.

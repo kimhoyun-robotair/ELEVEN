@@ -96,15 +96,16 @@ class TestbedRuntime:
             return
         self._ui_elapsed = 0.0
         for name, label in self.labels.items():
-            state = self.scene.rigs[name].controller.snapshot()
-            target = "-" if state["targetFloor"] is None else str(state["targetFloor"] + 1)
-            queued = ", ".join(str(floor + 1) for floor in state["queue"]) or "none"
-            label.text = (f"Floor {state['floor'] + 1} -> {target} | {state['state']}\n"
+            rig = self.scene.rigs[name]
+            state = rig.controller.snapshot()
+            target = "-" if state["targetFloor"] is None else rig.floor_labels[state["targetFloor"]]
+            queued = ", ".join(rig.floor_labels[floor] for floor in state["queue"]) or "none"
+            label.text = (f"Floor {rig.floor_labels[state['floor']]} -> {target} | {state['state']}\n"
                           f"Height {state['position']:.2f} m | Door {state['doorOpen']:.0%}\n"
                           f"Requested: {queued} | Door beam: {'occupied' if state['obstruction'] else 'clear'}")
 
     def press(self, elevator_id, action, floor=0, direction="up"):
-        """Public API. Floors are zero-based; labels in the UI are one-based."""
+        """Public API. Floors are zero-based; the UI uses authored floor labels."""
         return self.scene.rigs[elevator_id].press(action, floor, direction)
 
     def dispatch_press(self, prim_path):
@@ -122,7 +123,7 @@ class TestbedRuntime:
                 with ui.VStack(spacing=9, height=0):
                     ui.Label("Elevator controls", height=26, style={"font_size": 22})
                     ui.Label("Click a modeled button in the viewport, or use this panel.\n"
-                             "Floor labels are 1-based. Only requested buttons illuminate.",
+                             "Only requested buttons illuminate.",
                              height=38, word_wrap=True)
                     selection_model = ui.SimpleBoolModel(self.selection_presses)
                     with ui.HStack(height=24):
@@ -137,7 +138,7 @@ class TestbedRuntime:
                                 ui.Label("Cabin destinations", height=20)
                                 with ui.HStack(height=30, spacing=4):
                                     for floor in range(len(rig.heights)):
-                                        ui.Button(str(floor + 1), clicked_fn=lambda e=elevator_id, f=floor: self.press(e, "floor", f))
+                                        ui.Button(rig.floor_labels[floor], clicked_fn=lambda e=elevator_id, f=floor: self.press(e, "floor", f))
                                 with ui.HStack(height=28, spacing=4):
                                     ui.Button("Open door", clicked_fn=lambda e=elevator_id: self.press(e, "open"))
                                     ui.Button("Close door", clicked_fn=lambda e=elevator_id: self.press(e, "close"))
@@ -145,7 +146,7 @@ class TestbedRuntime:
                                 ui.Label("Landing calls", height=20)
                                 for floor in range(len(rig.heights)):
                                     with ui.HStack(height=25, spacing=4):
-                                        ui.Label(f"Floor {floor + 1}", width=70)
+                                        ui.Label(f"Floor {rig.floor_labels[floor]}", width=70)
                                         if floor < len(rig.heights) - 1:
                                             ui.Button("Call up", clicked_fn=lambda e=elevator_id, f=floor: self.press(e, "hall", f, "up"))
                                         if floor > 0:
@@ -203,4 +204,3 @@ class TestbedRuntime:
         if self.window:
             self.window.destroy()
         self.window = None
-

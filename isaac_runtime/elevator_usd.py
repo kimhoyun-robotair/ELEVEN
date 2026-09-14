@@ -74,6 +74,10 @@ class UsdElevatorRig:
         self.heights = list(_value(root, "testbed:floorHeights", []))
         if len(self.heights) < 2:
             raise ValueError(f"{self.path}: testbed:floorHeights needs at least two floors")
+        self.floor_labels = list(_value(root, "testbed:floorLabels",
+                                       [str(n + 1) for n in range(len(self.heights))]))
+        if len(self.floor_labels) != len(self.heights):
+            raise ValueError(f"{self.path}: testbed:floorLabels must match floorHeights")
         self.controller = ElevatorController(self.heights)
         self.travel = float(_value(root, "testbed:doorTravel", 0.72))
         self.cabin = Motion(stage.GetPrimAtPath(self.path + "/Cabin"))

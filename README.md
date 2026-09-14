@@ -2,7 +2,7 @@
 
 **Ubuntu 24.04 · Isaac Sim 5.1.0 · ROS 2 Jazzy**
 
-Office/House 다층 환경에서 AMR, NERO 팔과 gripper를 장착한 locomanipulator,
+Office/House/Research 다층 환경에서 AMR, NERO 팔과 gripper를 장착한 locomanipulator,
 또는 Scout Mini 센서 리그를 선택합니다. 실제 PhysX 바퀴 구동과 엘리베이터 접촉으로
 이동하며, ROS teleop, RGBD, 로봇별 라이다·IMU, odometry, 관절 상태와 TF를 제공합니다.
 
@@ -22,7 +22,7 @@ Office/House 다층 환경에서 AMR, NERO 팔과 gripper를 장착한 locomanip
 ```sh
 cd ~/aprl_robot_sim
 ./scripts/sim --scene office --robot locomanipulator
-# 환경: office | house, 로봇: amr | locomanipulator | scout
+# 환경: office | house | research, 로봇: amr | locomanipulator | scout
 # 화면 없이 실행: --headless
 ```
 
@@ -50,6 +50,11 @@ Isaac는 번들 Python 3.11 Jazzy bridge, ROS 노드는 시스템 Python 3.12를
 |---|---|---|---|
 | office | 4층 / 3.6 m | 30 × 24 m | E1–E4 |
 | house | 3층 / 3.4 m | 24 × 20 m | E1–E2 |
+| research | B1·1F·2F·3F·4F·RF / 4 m | 60 × 18 m | E1–E3 |
+
+Research는 `ELEVEN`의 연구동으로, B1 바닥이 Z=0 m이고 1F 바닥은 Z=4 m입니다.
+E1은 유리 승강기, E2는 일반 승강기, E3는 소형 서비스 승강기입니다.
+실행에 필요한 USD·텍스처를 포함하므로 원본 `~/ELEVEN` 없이 실행할 수 있습니다.
 
 **Robot eye**, **Free view**, **Go to robot**, **Follow robot**으로 시점을 바꿉니다.
 **Elevator controls** 또는 화면의 모델링된 버튼에서 호출·목적 층·문을 조작합니다.
@@ -71,6 +76,11 @@ Stop은 실행 종료입니다. 다시 실행하려면 스크립트를 새로 �
 ./scripts/sim --scene house --robot locomanipulator
 # 별도 터미널:
 ./scripts/ros route --scene house --robot locomanipulator --report .runtime/house-route.json
+
+# Research는 새 실행에서:
+./scripts/sim --scene research --robot locomanipulator
+# 별도 터미널:
+./scripts/ros route --scene research --robot locomanipulator --report .runtime/research-route.json
 ```
 
 Office는 E2, House는 E1으로 1→2층을 이동합니다. 호출 전 실제 주행 거리 **6 m 이상**을
@@ -80,12 +90,26 @@ stylus와 버튼의 **PhysX 접촉 보고**가 발생해야 호출합니다. 팔
 검사하고, 하차 후에도 6 m 이상 주행합니다. 보고서에는 접촉 위치·impulse와 실제
 궤적이 남습니다.
 
+Research 코스는 **B1 복도 12 m → E1 호출·탑승 → 1F 하차 → 복도 12 m**입니다.
+시작 위치는 `(-14, 2.6, 0.025)` m이며, `amr`, `locomanipulator`, `scout`가 같은
+코스를 사용합니다. ROS 명령과 예제 JSON의 층 번호는 아래 순서의 **1부터 시작하는
+번호**입니다. 화면과 건물 버튼은 B1·1F·2F 등의 층 이름을 표시합니다.
+
+| Research 층 | B1 | 1F | 2F | 3F | 4F | RF |
+|---|---|---|---|---|---|---|
+| ROS 명령 `floor` | 1 | 2 | 3 | 4 | 5 | 6 |
+| 상태 `floor` / `targetFloor` | 0 | 1 | 2 | 3 | 4 | 5 |
+| 바닥 Z (m) | 0 | 4 | 8 | 12 | 16 | 20 |
+
+예제는 NERO 팔이 누를 수 있는 높이의 1F 목적 버튼을 사용합니다.
+더 높은 층은 GUI 또는 ROS 엘리베이터 명령으로 선택할 수 있습니다.
+
 팔의 180° yaw 장착에 맞춰 버튼 조작 시 차체 전면은 패널 반대쪽을 향합니다.
 객실 패널에는 후진으로 접근해 팔로 버튼을 누르며, 전면 FLASH 라이다가 벽에 너무
 가까워져 점군을 잃는 것을 방지합니다. 버튼 조작 후에는 전진으로 패널에서 벗어납니다.
 
 `--robot amr` 또는 `--robot scout`를 양쪽 명령에 사용하면 팔 없이 같은 층간 주행을 수행하고, 버튼은
-ROS 엘리베이터 API로 요청합니다. 이는 제공된 두 환경의 waypoint 예제입니다.
+ROS 엘리베이터 API로 요청합니다. 이는 제공된 세 환경의 waypoint 예제입니다.
 Nav2 전역 경로 계획이나 임의 장애물 회피 기능은 포함하지 않습니다.
 예제 중에는 teleop이나 다른 명령 발행자를 함께 실행하지 마세요.
 
@@ -206,7 +230,8 @@ SCENE=office ROBOT=locomanipulator ./scripts/container up sim
 ./scripts/container run --rm ros ./scripts/ros verify --robot locomanipulator
 ```
 
-House는 `SCENE=house`, 기본 AMR은 `ROBOT=amr`, Scout는 `ROBOT=scout`입니다. Headless 실행:
+House는 `SCENE=house`, Research는 `SCENE=research`, 기본 AMR은 `ROBOT=amr`,
+Scout는 `ROBOT=scout`입니다. Headless 실행:
 
 ```sh
 ./scripts/container run --rm sim ./scripts/sim --headless --scene house --robot amr

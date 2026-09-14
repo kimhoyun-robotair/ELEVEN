@@ -28,7 +28,7 @@ def arguments():
     p.add_argument("--headless", action="store_true", help="Still renders camera products on the GPU")
     p.add_argument("--duration", type=float, default=0, help="Simulation seconds after sensor readiness; 0 runs until closed")
     p.add_argument("--config", type=Path, help="Defaults to config/scout.json for Scout, config/robot.json otherwise")
-    p.add_argument("--scene", choices=("office", "house"), default="office")
+    p.add_argument("--scene", choices=("office", "house", "research"), default="office")
     p.add_argument("--robot", choices=("amr", "locomanipulator", "scout"), default="amr")
     p.add_argument("--scout-face", choices=("original", "creeper"),
                    help="Scout-only face selection (default: original)")
@@ -126,6 +126,11 @@ def run(a, cfg, report):
         for prim in stage.Traverse():
             if prim.IsA(UsdGeom.Mesh) and 'LandingThreshold' in prim.GetName():
                 UsdGeom.Xformable(prim).AddTranslateOp(opSuffix='amrFlushSill').Set(Gf.Vec3d(0, 0, -.007))
+            if (a.scene == 'research' and prim.IsA(UsdLux.RectLight)
+                    and prim.GetName().startswith('ResearchCeilingLight')
+                    and prim.GetAttribute('inputs:intensity').HasAuthoredValueOpinion()):
+                # Match the Blender light exposure conversion used by the other worlds.
+                UsdLux.LightAPI(prim).CreateExposureAttr(11.0)
         route = json.loads((PROJECT / 'src/aprl_robot_sim/examples' / f'{a.scene}.json').read_text())
         if a.spawn:
             route['spawn'] = a.spawn

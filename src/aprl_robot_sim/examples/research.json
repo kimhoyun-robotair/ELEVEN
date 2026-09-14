@@ -1,0 +1,14 @@
+{
+  "scene": "research",
+  "elevator": "E1",
+  "from_floor": 1,
+  "to_floor": 2,
+  "spawn": [-14, 2.6, 0.025, 0],
+  "before": [[-2, 2.6]],
+  "lobby": [-2, 3.3],
+  "cabin": [-2, 5.6],
+  "exit": [-2, 2.6],
+  "after": [[10, 2.6]],
+  "hall_dock": [-0.905, 3.46],
+  "floor_dock": [-1.34, 6.42]
+}
