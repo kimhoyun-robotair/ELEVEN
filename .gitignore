@@ -20,9 +20,11 @@ __pycache__/
 !/docs/amr-360.gif
 !/docs/locomanipulator-360.gif
 !/docs/scout-360.gif
+!/docs/scout-creeper-360.gif
 
 # Local authoring tools; runtime USD and ROS descriptions are distributed.
 /assets/robot/components/*.blend
+!/assets/robot/components/scout_creeper_face.blend
 /isaac_runtime/build_robot.py
 /isaac_runtime/model_components.py
 /isaac_runtime/robot_description.py

@@ -1,6 +1,16 @@
 """Scout Twin configuration and native Isaac 5.1 sensors for the APRL runtime."""
 import math
+from pathlib import Path
 from typing import TypedDict
+
+
+def face_assets(project: Path, face: str) -> tuple[Path, Path]:
+    if face not in ('original', 'creeper'):
+        raise ValueError(f'Unknown Scout face: {face}')
+    usd = 'scout.usd' if face == 'original' else 'scout_creeper.usda'
+    urdf = 'scout_twin.urdf' if face == 'original' else 'scout_twin_creeper.urdf'
+    return (project / 'assets/robot' / usd,
+            project / 'src/scout_twin_description/urdf' / urdf)
 
 
 class CameraSpec(TypedDict):

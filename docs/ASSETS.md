@@ -24,10 +24,38 @@ RGB/depth intrinsics and MID-360 geometric scan approximation are retained.
 The shared scene's existing landing-sill offset also applies to Scout.
 
 ROS domain selection now respects APRL's `ROS_DOMAIN_ID` (default 73). The
-simulator publishes the original description and all TF, while the standalone
+simulator publishes the selected face's description and all TF, while the standalone
 description launch enables state publishers explicitly for preview. Source
 inspection scripts use `/ground_truth/odom` and `sim_world`; `/odom` consistently
 means wheel-encoder odometry for every APRL robot.
+
+### Scout Creeper face
+
+The optional `--scout-face creeper` uses `assets/robot/scout_creeper.usda`, a
+composition over the unchanged `scout.usd`. It disables the original yellow
+smile, replaces only the face inset in the shared screen mesh (retaining the
+laptop display), and references `components/scout_creeper_face.usda`.
+`scout_twin_creeper.urdf` changes only those two visuals; the original URDF,
+drive, sensor frames, mass, inertia, and collision shapes are retained.
+
+The user supplied `Creeper_Head_(S)_JE1.png`, preserved as
+`src/scout_twin_description/materials/creeper_reference.png`. The visible front's
+8×8 cell colors are sampled from that image in Blender and represented by
+colored mesh tiles, so OBJ/MTL and USD do not need a texture loader. The backing
+and tiles have small beveled edges, satin surfaces, and recessed dark eye/mouth
+cells. The +X-facing assembly occupies the original visual envelope:
+`(0.1355, -0.132, 0.964)` to `(0.1512, 0.132, 1.182)` m relative to `base_link`
+(15.7 mm depth × 264 mm width × 218 mm height). The existing 9 mm backing
+collision proxy is unchanged; the relief is visual geometry.
+
+The installed Blender **4.0.2** modeled and evaluated the geometry.
+`scripts/build-scout-face.py` exports the same evaluated vertices and normals to
+OBJ and USD Preview Surface materials, then uses OpenUSD to compose the optional
+robot layer. The editable `assets/robot/components/scout_creeper_face.blend`
+includes the packed reference image. Both the script and this Blender source
+are included in Git; Docker omits authoring `.blend` files. Regenerate with
+`python3 scripts/build-scout-face.py` on a host with Blender and OpenUSD Python.
+Runtime requires only the supplied USD and ROS description assets.
 
 ## AMR
 

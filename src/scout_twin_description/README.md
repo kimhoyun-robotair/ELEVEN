@@ -33,6 +33,15 @@ For a standalone URDF preview without Isaac:
 To use only the standalone state publisher, also set `rviz:=false`. Keep the
 preview publishers separate from a running simulator on the same DDS domain.
 
+Scout's optional Creeper face is selected with
+`./scripts/sim --robot scout --scout-face creeper`; omitting `--scout-face` keeps
+the original smile. The simulator publishes the selected URDF on
+`/robot_description`, so the usual RViz command needs no additional option.
+For a standalone Creeper preview, add `face:=creeper` to the launch command
+above. `face:=original` is the default; an explicit `urdf:=...` still overrides it.
+The face variants share all joints, inertias, collisions, and sensor frames.
+See the [asset notes](../../docs/ASSETS.md#scout-creeper-face) for the Blender source.
+
 Sensor topics preserve the supplied Scout interface:
 
 - `/mid360/points` and `/mid360/imu` use `mid360_link` and `imu_link`.

@@ -1,4 +1,6 @@
 import json
+import contextlib
+import io
 from pathlib import Path
 import sys
 import unittest
@@ -11,7 +13,7 @@ sys.path.insert(0, str(PROJECT))
 
 from isaac_runtime.camera_frames import camera_sample
 from isaac_runtime.control import AMR_DRIVE, SCOUT_DRIVE, DriveLimiter
-from isaac_runtime.scout import camera_specs, runtime_config
+from isaac_runtime.scout import camera_specs, face_assets, runtime_config
 from isaac_runtime.simulation import arguments
 
 
@@ -45,6 +47,39 @@ class ScoutDriveTests(unittest.TestCase):
 
 
 class ScoutSelectionTests(unittest.TestCase):
+    def test_face_defaults_to_original_and_selects_matching_assets(self):
+        for face, usd, urdf in (('original', 'scout.usd', 'scout_twin.urdf'),
+                                ('creeper', 'scout_creeper.usda', 'scout_twin_creeper.urdf')):
+            argv = ['simulation.py', '--robot', 'scout']
+            if face == 'creeper':
+                argv += ['--scout-face', face]
+            with self.subTest(face=face), patch.object(sys, 'argv', argv):
+                args, cfg = arguments()
+                self.assertEqual(args.scout_face, face)
+                asset, description = face_assets(PROJECT, args.scout_face)
+                self.assertEqual(asset, PROJECT / 'assets/robot' / usd)
+                self.assertEqual(description, PROJECT / 'src/scout_twin_description/urdf' / urdf)
+                self.assertTrue(asset.is_file())
+                self.assertTrue(description.is_file())
+                self.assertEqual(cfg, runtime_config(json.loads((PROJECT / 'config/scout.json').read_text())))
+
+    def test_face_option_is_scout_only(self):
+        for robot in ('amr', 'locomanipulator'):
+            for face in ('original', 'creeper'):
+                argv = ['simulation.py', '--robot', robot, '--scout-face', face]
+                with self.subTest(robot=robot, face=face), patch.object(sys, 'argv', argv):
+                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                        arguments()
+                    self.assertEqual(error.exception.code, 2)
+
+    def test_unknown_face_is_rejected(self):
+        with patch.object(sys, 'argv', ['simulation.py', '--robot', 'scout', '--scout-face', 'unknown']):
+            with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                arguments()
+            self.assertEqual(error.exception.code, 2)
+        with self.assertRaises(ValueError):
+            face_assets(PROJECT, 'unknown')
+
     def test_selected_robot_uses_its_own_config(self):
         for name, config, radius in (('scout', 'scout.json', .08), ('amr', 'robot.json', .1),
                                      ('locomanipulator', 'robot.json', .1)):

@@ -20,7 +20,7 @@ import traceback
 PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT))
 from isaac_runtime.control import AMR_DRIVE, SCOUT_DRIVE, DriveLimiter
-from isaac_runtime.scout import CameraSpec, camera_specs as scout_camera_specs, configure_camera, runtime_config
+from isaac_runtime.scout import CameraSpec, camera_specs as scout_camera_specs, configure_camera, face_assets, runtime_config
 
 
 def arguments():
@@ -30,6 +30,8 @@ def arguments():
     p.add_argument("--config", type=Path, help="Defaults to config/scout.json for Scout, config/robot.json otherwise")
     p.add_argument("--scene", choices=("office", "house"), default="office")
     p.add_argument("--robot", choices=("amr", "locomanipulator", "scout"), default="amr")
+    p.add_argument("--scout-face", choices=("original", "creeper"),
+                   help="Scout-only face selection (default: original)")
     p.add_argument("--spawn", nargs=4, type=float, metavar=("X", "Y", "Z", "YAW"), help="Initial base-footprint pose in meters and yaw degrees")
     p.add_argument("--inspection", action="store_true", help="Isolated robot turntable in Isaac GUI")
     p.add_argument("--capture-orbit", type=Path, help="Write 360-degree PNG frames from the actual USD")
@@ -39,6 +41,9 @@ def arguments():
     p.add_argument("--caster-yaw-deg", type=float, default=None, help="Initial swivel angle for repeatable caster startup checks")
     p.add_argument("--physics-trace", action="store_true", help="Include half-second wheel pose samples in the report")
     a, kit_args = p.parse_known_args()
+    if a.scout_face is not None and a.robot != 'scout':
+        p.error('--scout-face requires --robot scout')
+    a.scout_face = a.scout_face or 'original'
     sys.argv = [sys.argv[0], *kit_args]
     a.world = PROJECT / "assets/scenes" / f"{a.scene}.usda"
     a.config = a.config or PROJECT / 'config' / ('scout.json' if a.robot == 'scout' else 'robot.json')
@@ -143,7 +148,11 @@ def run(a, cfg, report):
         drive_layout = SCOUT_DRIVE if scout else AMR_DRIVE
         scan_sides = () if scout else ('front_right', 'rear_left')
         robot_prim = UsdGeom.Xform.Define(stage, root)
-        asset = PROJECT / 'assets/robot' / (f'{a.robot}.usd' if scout else f'{a.robot}.usda')
+        if scout:
+            asset, description_path = face_assets(PROJECT, a.scout_face)
+        else:
+            asset = PROJECT / 'assets/robot' / f'{a.robot}.usda'
+            description_path = PROJECT / 'src/aprl_robot_sim/urdf' / f'{a.robot}.urdf'
         robot_prim.GetPrim().GetReferences().AddReference(str(asset))
         spawn = list(route['spawn'][:3])
         if scout:
@@ -226,8 +235,6 @@ def run(a, cfg, report):
             "tf_static": node.create_publisher(TFMessage, "/tf_static", static_qos),
             "robot_description": node.create_publisher(String, "/robot_description", static_qos),
         }
-        description_path = (PROJECT / 'src/scout_twin_description/urdf/scout_twin.urdf' if scout
-                            else PROJECT / 'src/aprl_robot_sim/urdf' / f'{a.robot}.urdf')
         description = description_path.read_text()
         pubs["robot_description"].publish(String(data=description))
         current_time = [float(sim.current_time)]
@@ -568,6 +575,8 @@ def run(a, cfg, report):
             capture = Camera(prim_path='/World/RobotView', name='turntable', resolution=(960, 640), frequency=rhz)
             capture.initialize()
         capture_count = 0
+        if scout:
+            report['scout_face'] = a.scout_face
         report.update({"phase": "running", "robot": a.robot, "scene": a.scene, "python_version": sys.version.split()[0],
                        "ros_distro": os.environ.get("ROS_DISTRO", "jazzy"),
                        "initial_caster_yaw_deg": a.caster_yaw_deg, "joint_names": all_joint_names,

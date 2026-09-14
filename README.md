@@ -6,9 +6,11 @@ Office/House 다층 환경에서 AMR, NERO 팔과 gripper를 장착한 locomanip
 또는 Scout Mini 센서 리그를 선택합니다. 실제 PhysX 바퀴 구동과 엘리베이터 접촉으로
 이동하며, ROS teleop, RGBD, 로봇별 라이다·IMU, odometry, 관절 상태와 TF를 제공합니다.
 
-| AMR | AMR + NERO | Scout Mini |
-|---|---|---|
-| [![AMR 회전](docs/amr-360.gif)](docs/amr-360.gif) | [![Locomanipulator 회전](docs/locomanipulator-360.gif)](docs/locomanipulator-360.gif) | [![Scout Mini 회전](docs/scout-360.gif)](docs/scout-360.gif) |
+| AMR | AMR + NERO |
+|---|---|
+| [![AMR 회전](docs/amr-360.gif)](docs/amr-360.gif) | [![Locomanipulator 회전](docs/locomanipulator-360.gif)](docs/locomanipulator-360.gif) |
+| **Scout Mini · 기존 얼굴** | **Scout Mini · 크리퍼 얼굴** |
+| [![Scout Mini 회전](docs/scout-360.gif)](docs/scout-360.gif) | [![Scout Mini 크리퍼 회전](docs/scout-creeper-360.gif)](docs/scout-creeper-360.gif) |
 
 이미지를 누르면 실제 Isaac USD 렌더링으로 만든 360° 회전 GIF를 열 수 있습니다.
 
@@ -93,6 +95,18 @@ Nav2 전역 경로 계획이나 임의 장애물 회피 기능은 포함하지 �
 
 `~/scout_mini_isaac510_ros2_jazzy/scout_twin`의 USD, URDF, OBJ/MTL 메시와
 `scout_twin_description` 패키지를 포함합니다. 원본 디렉터리 없이 실행할 수 있습니다.
+
+Scout만 `--scout-face original|creeper`로 얼굴을 선택할 수 있으며 기본값은 `original`입니다.
+크리퍼 얼굴은 첨부 이미지의 픽셀 무늬를 Blender로 모델링한 **264 × 218 mm** 패널로,
+기존 얼굴의 위치와 전체 두께 **15.7 mm**를 유지합니다. 선택한 얼굴은 Isaac USD와
+`/robot_description`의 URDF·메시에 함께 반영되어 RViz에서도 동일하게 표시됩니다.
+주행·센서·질량·충돌체는 두 얼굴에서 동일합니다.
+
+```sh
+./scripts/sim --scene office --robot scout --scout-face creeper
+# 기존 얼굴: --scout-face original 또는 옵션 생략
+./scripts/sim --inspection --robot scout --scout-face creeper
+```
 
 ```sh
 ./scripts/ros build
@@ -398,8 +412,14 @@ FLASH의 현재 위치는 `base_link` 기준 `(0.400, 0, 0.022)` m, 회전은 **
 ```
 
 `--robot amr`로 기본 AMR, `--robot scout`로 Scout Mini를 확인할 수 있습니다.
+Scout 크리퍼 얼굴은 `--robot scout --scout-face creeper`로 확인합니다.
+편집 가능한 [Blender 원본](assets/robot/components/scout_creeper_face.blend)과
+[재생성 스크립트](scripts/build-scout-face.py)를 포함합니다. Blender 4.0.2와
+OpenUSD Python 바인딩이 설치된 개발 환경에서 `python3 scripts/build-scout-face.py`로
+크리퍼 자산을 재생성할 수 있습니다. 일반 실행에는 Blender가 필요하지 않습니다.
+
 검증 기록·주행 녹화·회전 MP4·Blender 원본·모델 재생성 도구·미사용 NERO 변형 모델은
-로컬 개발 자료로 보관하며 Git 및 Docker 배포에서 제외합니다.
+위 크리퍼 원본·스크립트를 제외하고 로컬 개발 자료로 보관하며 Git 및 Docker 배포에서 제외합니다.
 README의 회전 GIF, 실행용 자산, 자산 출처 문서는 배포에 포함합니다.
 
 # Future Work

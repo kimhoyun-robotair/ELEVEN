@@ -12,7 +12,10 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def _nodes(context):
     share = Path(get_package_share_directory("scout_twin_description"))
-    urdf_path = Path(LaunchConfiguration("urdf").perform(context)).expanduser()
+    face = LaunchConfiguration("face").perform(context)
+    urdf_override = LaunchConfiguration("urdf").perform(context)
+    filename = "scout_twin_creeper.urdf" if face == "creeper" else "scout_twin.urdf"
+    urdf_path = Path(urdf_override).expanduser() if urdf_override else share / "urdf" / filename
     if not urdf_path.is_file():
         raise FileNotFoundError(f"Robot URDF does not exist: {urdf_path}")
     robot_description = ParameterValue(urdf_path.read_text(encoding="utf-8"), value_type=str)
@@ -48,9 +51,9 @@ def _nodes(context):
 
 
 def generate_launch_description():
-    share = Path(get_package_share_directory("scout_twin_description"))
     return LaunchDescription([
-        DeclareLaunchArgument("urdf", default_value=str(share / "urdf" / "scout_twin.urdf")),
+        DeclareLaunchArgument("face", default_value="original", choices=["original", "creeper"]),
+        DeclareLaunchArgument("urdf", default_value="", description="Optional URDF override; otherwise selected by face"),
         DeclareLaunchArgument("use_sim_time", default_value="true"),
         DeclareLaunchArgument("rviz", default_value="true"),
         DeclareLaunchArgument("fixed_frame", default_value="sim_world"),

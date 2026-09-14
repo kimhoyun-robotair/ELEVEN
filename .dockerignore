@@ -17,6 +17,7 @@ docs/*
 !docs/amr-360.gif
 !docs/locomanipulator-360.gif
 !docs/scout-360.gif
+!docs/scout-creeper-360.gif
 assets/robot/components/*.blend
 isaac_runtime/build_robot.py
 isaac_runtime/model_components.py
