@@ -1,0 +1,115 @@
+robot_name: APRL · Office · NAV2
+fixed_frame: map
+base_frame: base_link
+imu_fixed_frame: sim_world
+use_sim_time: true
+server:
+  host: 127.0.0.1
+  port: 8080
+  update_hz: 10
+teleop:
+  topic: /cmd_vel_teleop
+  stamped: false
+  frame_id: base_link
+  max_linear: 0.3
+  max_angular: 0.6
+  timeout: 0.3
+  publish_hz: 20
+limits:
+  cloud_points: 40000
+  cloud_hz: 5
+  map_cells: 1048576
+  voxels: 20000
+  path_points: 10000
+topics:
+  tf:
+    name: /tf
+    stale_after: 2.0
+  tf_static:
+    name: /tf_static
+    latched: true
+  robot_description:
+    name: /robot_description
+    latched: true
+  joint_states:
+    name: /joint_states
+    stale_after: 2.0
+  odom:
+    name: /ground_truth/odom
+    stale_after: 2.0
+  imu:
+    name: /imu/data
+    stale_after: 1.0
+  cloud:
+    name: /mlx/pointcloud
+    stale_after: 2.0
+  map:
+    name: /map
+    latched: true
+  map3d:
+    name: /occupied_cells_vis_array
+    latched: true
+  cloud_map:
+    name: /map_cloud
+    stale_after: 10.0
+  trajectory:
+    name: /trajectory
+    stale_after: 5.0
+  battery:
+    name: /battery_state
+    stale_after: 10.0
+  diagnostics:
+    name: /diagnostics
+    stale_after: 5.0
+  global_costmap:
+    name: /global_costmap/costmap
+    latched: true
+  local_costmap:
+    name: /local_costmap/costmap
+    latched: true
+  nav_plan:
+    name: /plan
+    stale_after: 5.0
+  amcl_pose:
+    name: /amcl_pose
+    stale_after: 30.0
+    latched: true
+bag:
+  directory: ./bags/aprl-nav2
+  storage: mcap
+  min_free_gb: 1.0
+  topics:
+  - /clock
+  - /cmd_vel
+  - /tf
+  - /tf_static
+  - /robot_description
+  - /joint_states
+  - /ground_truth/odom
+  - /odom
+  - /imu/data
+  - /mlx/pointcloud
+  - /elevator/state
+  - /trajectory
+  - /map
+  - /global_costmap/costmap
+  - /local_costmap/costmap
+  - /plan
+  - /amcl_pose
+  - /initialpose
+  - /cmd_vel_nav
+  - /cmd_vel_teleop
+  - /navigation/inhibit
+  - /navigate_to_pose/_action/status
+  - /navigate_to_pose/_action/feedback
+asset_packages:
+- aprl_robot_sim
+- nero_description
+- scout_twin_description
+asset_roots:
+- ~/aprl_robot_sim/src
+navigation:
+  enabled: true
+  action: /navigate_to_pose
+  initial_pose_topic: /initialpose
+  inhibit_topic: /navigation/inhibit

@@ -44,6 +44,32 @@ Isaac는 번들 Python 3.11 Jazzy bridge, ROS 노드는 시스템 Python 3.12를
 실행기가 두 환경을 분리하므로 Isaac 실행 전에 ROS를 직접 source할 필요가 없습니다.
 기본 `ROS_DOMAIN_ID=73`이며, 여러 실행은 각각 다른 domain을 사용하세요.
 
+## 태블릿에서 Nav2 주행
+
+Office 1층의 AMR / locomanipulator에 사용할 Nav2 실행, 설정, PGM 지도와 속도 중재기는
+[src/aprl_navigation](src/aprl_navigation/README.md)에 있습니다. Captain Dalgu는
+시각화와 ROS 명령만 담당하며 이 시뮬레이터 패키지가 AMCL과 Nav2를 실행합니다.
+
+```sh
+sudo apt install ros-jazzy-navigation2 ros-jazzy-nav2-bringup
+./scripts/ros build
+ROS_LOCALHOST_ONLY=1 ./scripts/sim --scene office --robot locomanipulator
+# AMR_READY 이후 별도 터미널:
+ROS_LOCALHOST_ONLY=1 ./scripts/ros nav2
+# 별도 터미널:
+cd ~/captain-dalgu
+./scripts/run-aprl-sim.sh --nav2
+./scripts/connect-tablet.sh
+```
+
+태블릿 Chrome의 `http://localhost:8080`에서 **Pose Estimate / Nav2 Goal**을 선택하고
+지도에서 위치를 누른 채 방향으로 드래그한 다음 명령을 확정합니다. PGM 지도,
+global/local costmap, 계획 경로, 남은 거리, 목표 취소를 지원합니다.
+화면 연결 해제 또는 수동 조작 전환 시 목표를 취소하고 Nav2 속도를 차단합니다.
+Nav2 모드에서는 기존 `teleop` / `route` 등 `/cmd_vel` 직접 발행 프로그램을 함께 실행하지 마세요.
+다층 waypoint 예제는 기존 방식대로 독립 실행합니다. 새 Nav2 기본 지도는 Office 1층용이며,
+엘리베이터를 이용한 층간 Nav2 계획과 Scout용 설정은 포함하지 않습니다.
+
 ## 환경과 GUI
 
 | 환경 | 층 / 층간 높이 | 면적 | 엘리베이터 |
@@ -110,7 +136,7 @@ Research 코스는 **B1 복도 12 m → E1 호출·탑승 → 1F 하차 → 복�
 
 `--robot amr` 또는 `--robot scout`를 양쪽 명령에 사용하면 팔 없이 같은 층간 주행을 수행하고, 버튼은
 ROS 엘리베이터 API로 요청합니다. 이는 제공된 세 환경의 waypoint 예제입니다.
-Nav2 전역 경로 계획이나 임의 장애물 회피 기능은 포함하지 않습니다.
+이 waypoint 예제 자체에는 Nav2 전역 경로 계획이나 임의 장애물 회피 기능이 없습니다.
 예제 중에는 teleop이나 다른 명령 발행자를 함께 실행하지 마세요.
 
 ## 로봇과 센서

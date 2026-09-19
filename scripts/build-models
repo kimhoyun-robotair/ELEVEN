@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+command -v blender >/dev/null || { echo 'Blender is required to rebuild the models' >&2; exit 2; }
+blender -b -t 4 -P "$project_root/isaac_runtime/model_components.py"
+APRL_ISAAC_SCRIPT="$project_root/isaac_runtime/build_robot.py" exec "$project_root/scripts/sim"

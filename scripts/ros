@@ -15,7 +15,8 @@ if [[ "$action" != build && -f "$project_root/install/local_setup.bash" ]]; then
   source "$project_root/install/local_setup.bash"
 fi
 case "$action" in
-  build) exec /usr/bin/python3 -m colcon build --base-paths src --packages-select aprl_robot_sim nero_description scout_twin_description --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3 --symlink-install "$@" ;;
+  build) exec /usr/bin/python3 -m colcon build --base-paths src --packages-select aprl_robot_sim nero_description scout_twin_description aprl_navigation --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3 --symlink-install "$@" ;;
+  nav2) exec ros2 launch aprl_navigation navigation.launch.py "$@" ;;
   teleop|arm_teleop|route|verify) PYTHONPATH="$project_root/src/aprl_robot_sim:$PYTHONPATH" exec /usr/bin/python3 -m "aprl_robot_sim.$action" "$@" ;;
   rviz)
     robot="${ROBOT:-amr}"

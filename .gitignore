@@ -22,13 +22,9 @@ __pycache__/
 !/docs/scout-360.gif
 !/docs/scout-creeper-360.gif
 
-# Local authoring tools; runtime USD and ROS descriptions are distributed.
+# Local Blender source files; exported runtime assets are distributed.
 /assets/robot/components/*.blend
 !/assets/robot/components/scout_creeper_face.blend
-/isaac_runtime/build_robot.py
-/isaac_runtime/model_components.py
-/isaac_runtime/robot_description.py
-/scripts/build-models
 
 # Only the parallel-gripper description is used by the current robots.
 /src/nero_description/urdf/*
